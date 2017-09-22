@@ -1,19 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using SmartGC.Lib;
+using System;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace SmartGC.Ui
 {
     public partial class FormMain : Form
     {
+        DataTable dtCardInfo, dtCommodityInfo;
+
+
         public FormMain()
         {
             InitializeComponent();
+            dgvCardInfo.AutoGenerateColumns = false;
+            dgvCommodity.AutoGenerateColumns = false;
         }
 
         private void tsmiSetting_Click(object sender, EventArgs e)
@@ -35,12 +36,41 @@ namespace SmartGC.Ui
 
         private void FormMain_Load(object sender, EventArgs e)
         {
-            dgvUserInfo.Rows.Add("1", "0000001", "sdfasdf", "已绑定", "张三", "13801231231", "2017-08-19 22:01:11", "编辑");
-            dgvUserInfo.Rows.Add("1", "0000001", "sdfasdf", "已绑定", "张三", "13801231231", "2017-08-19 22:01:11", "编辑");
-            dgvUserInfo.Rows.Add("1", "0000001", "sdfasdf", "已绑定", "张三", "13801231231", "2017-08-19 22:01:11", "编辑");
-            dgvUserInfo.Rows.Add("1", "0000001", "sdfasdf", "已绑定", "张三", "13801231231", "2017-08-19 22:01:11", "编辑");
-            dgvUserInfo.Rows.Add("1", "0000001", "sdfasdf", "已绑定", "张三", "13801231231", "2017-08-19 22:01:11", "编辑");
-            dgvUserInfo.Rows.Add("1", "0000001", "sdfasdf", "已绑定", "张三", "13801231231", "2017-08-19 22:01:11", "编辑");
+            pagerCardInfo.OnPageChanged += new EventHandler(pagerCardInfo_OnPageChanged);
+            LoadCardInfo();
+        }
+
+        private void pagerCardInfo_OnPageChanged(object sender, EventArgs e)
+        {
+            LoadCardInfo();
+        }
+
+        private void LoadCardInfo()
+        {
+            dtCardInfo = Common.GetCardInfoData("json");
+
+            DataTable dt = dtCardInfo.Clone();
+
+            DataRow[] rows = dtCardInfo.Select("Index>" + (pagerCardInfo.PageIndex - 1) * pagerCardInfo.PageSize + "and Index<=" + pagerCardInfo.PageIndex * pagerCardInfo.PageSize);
+
+            foreach (DataRow row in rows)
+            {
+                dt.Rows.Add(row.ItemArray);
+            }
+
+            dgvCardInfo.DataSource = dt;
+            pagerCardInfo.DrawControl(dtCardInfo.Rows.Count);
+        }
+
+        private void dgvCardInfo_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex == 7)
+            {
+                DataTable dt = dtCardInfo.Clone();
+                DataRow[] rows = dtCardInfo.Select("Index=" + dgvCardInfo.Rows[e.RowIndex].Cells[0].Value);
+                FormCardInfo frm = new FormCardInfo(rows[0]);
+                frm.ShowDialog();
+            }
         }
     }
 }

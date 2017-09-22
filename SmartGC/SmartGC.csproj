@@ -37,6 +37,7 @@
   <ItemGroup>
     <Reference Include="DevComponents.DotNetBar2, Version=12.0.0.1, Culture=neutral, PublicKeyToken=c39c3242a43eee2b, processorArchitecture=MSIL" />
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -52,6 +53,12 @@
     <Compile Include="Lib\Common.cs" />
     <Compile Include="Lib\Configs.cs" />
     <Compile Include="Lib\ReadCardLib.cs" />
+    <Compile Include="UControl\PagerControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UControl\PagerControl.designer.cs">
+      <DependentUpon>PagerControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Ui\FormAbout.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -84,6 +91,9 @@
     <Compile Include="Ui\FormConfig.Designer.cs">
       <DependentUpon>FormConfig.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="UControl\PagerControl.resx">
+      <DependentUpon>PagerControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Ui\FormAbout.resx">
       <DependentUpon>FormAbout.cs</DependentUpon>
     </EmbeddedResource>
@@ -123,6 +133,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app.ico" />
+    <Content Include="mwhrf_bj.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

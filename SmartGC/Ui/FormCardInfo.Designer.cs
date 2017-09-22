@@ -42,7 +42,7 @@
             this.textBox5 = new System.Windows.Forms.TextBox();
             this.textBox6 = new System.Windows.Forms.TextBox();
             this.textBox7 = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnOK = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label5
@@ -159,21 +159,22 @@
             this.textBox7.Size = new System.Drawing.Size(300, 21);
             this.textBox7.TabIndex = 17;
             // 
-            // button1
+            // btnOK
             // 
-            this.button1.Location = new System.Drawing.Point(304, 227);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 18;
-            this.button1.Text = "确定";
-            this.button1.UseVisualStyleBackColor = true;
+            this.btnOK.Location = new System.Drawing.Point(304, 227);
+            this.btnOK.Name = "btnOK";
+            this.btnOK.Size = new System.Drawing.Size(75, 23);
+            this.btnOK.TabIndex = 18;
+            this.btnOK.Text = "确定";
+            this.btnOK.UseVisualStyleBackColor = true;
+            this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
             // 
             // FormCardInfo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(401, 262);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.btnOK);
             this.Controls.Add(this.textBox7);
             this.Controls.Add(this.textBox6);
             this.Controls.Add(this.textBox5);
@@ -193,6 +194,7 @@
             this.MinimizeBox = false;
             this.Name = "FormCardInfo";
             this.ShowIcon = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "卡信息";
             this.Load += new System.EventHandler(this.FormCardBinding_Load);
             this.ResumeLayout(false);
@@ -216,6 +218,6 @@
         private System.Windows.Forms.TextBox textBox5;
         private System.Windows.Forms.TextBox textBox6;
         private System.Windows.Forms.TextBox textBox7;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnOK;
     }
 }

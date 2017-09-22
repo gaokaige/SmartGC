@@ -36,7 +36,6 @@
             this.plBase = new System.Windows.Forms.Panel();
             this.plBottom = new System.Windows.Forms.Panel();
             this.plCenter = new System.Windows.Forms.Panel();
-            this.dgvUserInfo = new System.Windows.Forms.DataGridView();
             this.plTop = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -46,35 +45,38 @@
             this.label4 = new System.Windows.Forms.Label();
             this.tbxStatus = new System.Windows.Forms.TextBox();
             this.tbxCardNo = new System.Windows.Forms.TextBox();
-            this.tbxUserName = new System.Windows.Forms.TextBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.plBottom1 = new System.Windows.Forms.Panel();
+            this.dgvCommodity = new System.Windows.Forms.DataGridView();
             this.Column9 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column10 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column11 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column12 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column13 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column14 = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.dgvCardInfo = new System.Windows.Forms.DataGridView();
+            this.pagerCardInfo = new TActionProject.PagerControl();
+            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumn5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column6 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column8 = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.dataGridViewButtonColumn1 = new System.Windows.Forms.DataGridViewButtonColumn();
             this.menuStrip1.SuspendLayout();
             this.plBase.SuspendLayout();
+            this.plBottom.SuspendLayout();
             this.plCenter.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvUserInfo)).BeginInit();
             this.plTop.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvCommodity)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvCardInfo)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -104,8 +106,8 @@
             // 
             // plBase
             // 
-            this.plBase.Controls.Add(this.plBottom);
             this.plBase.Controls.Add(this.plCenter);
+            this.plBase.Controls.Add(this.plBottom);
             this.plBase.Dock = System.Windows.Forms.DockStyle.Fill;
             this.plBase.Location = new System.Drawing.Point(3, 3);
             this.plBase.Name = "plBase";
@@ -114,51 +116,25 @@
             // 
             // plBottom
             // 
+            this.plBottom.Controls.Add(this.pagerCardInfo);
             this.plBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.plBottom.Location = new System.Drawing.Point(0, 562);
+            this.plBottom.Location = new System.Drawing.Point(0, 571);
             this.plBottom.Name = "plBottom";
-            this.plBottom.Size = new System.Drawing.Size(994, 39);
+            this.plBottom.Size = new System.Drawing.Size(994, 30);
             this.plBottom.TabIndex = 13;
             // 
             // plCenter
             // 
-            this.plCenter.Controls.Add(this.dgvUserInfo);
+            this.plCenter.Controls.Add(this.dgvCardInfo);
             this.plCenter.Dock = System.Windows.Forms.DockStyle.Fill;
             this.plCenter.Location = new System.Drawing.Point(0, 0);
             this.plCenter.Name = "plCenter";
-            this.plCenter.Size = new System.Drawing.Size(994, 601);
+            this.plCenter.Size = new System.Drawing.Size(994, 571);
             this.plCenter.TabIndex = 14;
-            // 
-            // dgvUserInfo
-            // 
-            this.dgvUserInfo.AllowUserToAddRows = false;
-            this.dgvUserInfo.AllowUserToDeleteRows = false;
-            this.dgvUserInfo.AllowUserToResizeRows = false;
-            this.dgvUserInfo.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
-            this.dgvUserInfo.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.dgvUserInfo.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvUserInfo.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Column1,
-            this.Column2,
-            this.Column3,
-            this.Column4,
-            this.Column5,
-            this.Column6,
-            this.Column7,
-            this.Column8});
-            this.dgvUserInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvUserInfo.Location = new System.Drawing.Point(0, 0);
-            this.dgvUserInfo.MultiSelect = false;
-            this.dgvUserInfo.Name = "dgvUserInfo";
-            this.dgvUserInfo.ReadOnly = true;
-            this.dgvUserInfo.RowHeadersVisible = false;
-            this.dgvUserInfo.RowTemplate.Height = 23;
-            this.dgvUserInfo.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvUserInfo.Size = new System.Drawing.Size(994, 601);
-            this.dgvUserInfo.TabIndex = 0;
             // 
             // plTop
             // 
+            this.plTop.Controls.Add(this.textBox1);
             this.plTop.Controls.Add(this.label1);
             this.plTop.Controls.Add(this.label2);
             this.plTop.Controls.Add(this.btnSearch);
@@ -167,7 +143,6 @@
             this.plTop.Controls.Add(this.label4);
             this.plTop.Controls.Add(this.tbxStatus);
             this.plTop.Controls.Add(this.tbxCardNo);
-            this.plTop.Controls.Add(this.tbxUserName);
             this.plTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.plTop.Location = new System.Drawing.Point(0, 25);
             this.plTop.Name = "plTop";
@@ -240,13 +215,6 @@
             this.tbxCardNo.Size = new System.Drawing.Size(100, 21);
             this.tbxCardNo.TabIndex = 4;
             // 
-            // tbxUserName
-            // 
-            this.tbxUserName.Location = new System.Drawing.Point(285, 13);
-            this.tbxUserName.Name = "tbxUserName";
-            this.tbxUserName.Size = new System.Drawing.Size(100, 21);
-            this.tbxUserName.TabIndex = 5;
-            // 
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
@@ -274,8 +242,8 @@
             // 
             // tabPage2
             // 
-            this.tabPage2.Controls.Add(this.panel1);
-            this.tabPage2.Controls.Add(this.dataGridView1);
+            this.tabPage2.Controls.Add(this.plBottom1);
+            this.tabPage2.Controls.Add(this.dgvCommodity);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
@@ -284,42 +252,46 @@
             this.tabPage2.Text = "  积分兑换  ";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // panel1
+            // plBottom1
             // 
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(3, 565);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(994, 39);
-            this.panel1.TabIndex = 14;
+            this.plBottom1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.plBottom1.Location = new System.Drawing.Point(3, 574);
+            this.plBottom1.Name = "plBottom1";
+            this.plBottom1.Size = new System.Drawing.Size(994, 30);
+            this.plBottom1.TabIndex = 14;
             // 
-            // dataGridView1
+            // dgvCommodity
             // 
-            this.dataGridView1.AllowUserToAddRows = false;
-            this.dataGridView1.AllowUserToDeleteRows = false;
-            this.dataGridView1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dgvCommodity.AllowUserToAddRows = false;
+            this.dgvCommodity.AllowUserToDeleteRows = false;
+            this.dgvCommodity.AllowUserToResizeRows = false;
+            this.dgvCommodity.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvCommodity.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.dgvCommodity.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvCommodity.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Column9,
             this.Column10,
             this.Column11,
             this.Column12,
             this.Column13,
             this.Column14});
-            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridView1.Location = new System.Drawing.Point(3, 3);
-            this.dataGridView1.MultiSelect = false;
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.RowHeadersVisible = false;
-            this.dataGridView1.RowTemplate.Height = 23;
-            this.dataGridView1.Size = new System.Drawing.Size(994, 601);
-            this.dataGridView1.TabIndex = 1;
+            this.dgvCommodity.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvCommodity.Location = new System.Drawing.Point(3, 3);
+            this.dgvCommodity.MultiSelect = false;
+            this.dgvCommodity.Name = "dgvCommodity";
+            this.dgvCommodity.ReadOnly = true;
+            this.dgvCommodity.RowHeadersVisible = false;
+            this.dgvCommodity.RowTemplate.Height = 23;
+            this.dgvCommodity.Size = new System.Drawing.Size(994, 601);
+            this.dgvCommodity.TabIndex = 1;
             // 
             // Column9
             // 
+            this.Column9.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             this.Column9.HeaderText = "序号";
             this.Column9.Name = "Column9";
             this.Column9.ReadOnly = true;
+            this.Column9.Width = 60;
             // 
             // Column10
             // 
@@ -347,70 +319,132 @@
             // 
             // Column14
             // 
+            this.Column14.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
             this.Column14.HeaderText = "兑换";
             this.Column14.Name = "Column14";
             this.Column14.ReadOnly = true;
+            this.Column14.Width = 80;
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(285, 13);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(100, 21);
+            this.textBox1.TabIndex = 9;
+            // 
+            // dgvCardInfo
+            // 
+            this.dgvCardInfo.AllowUserToAddRows = false;
+            this.dgvCardInfo.AllowUserToDeleteRows = false;
+            this.dgvCardInfo.AllowUserToResizeRows = false;
+            this.dgvCardInfo.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvCardInfo.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.dgvCardInfo.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvCardInfo.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewTextBoxColumn1,
+            this.dataGridViewTextBoxColumn2,
+            this.dataGridViewTextBoxColumn3,
+            this.dataGridViewTextBoxColumn4,
+            this.dataGridViewTextBoxColumn5,
+            this.Column1,
+            this.Column2,
+            this.dataGridViewButtonColumn1});
+            this.dgvCardInfo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvCardInfo.Location = new System.Drawing.Point(0, 0);
+            this.dgvCardInfo.MultiSelect = false;
+            this.dgvCardInfo.Name = "dgvCardInfo";
+            this.dgvCardInfo.ReadOnly = true;
+            this.dgvCardInfo.RowHeadersVisible = false;
+            this.dgvCardInfo.RowTemplate.Height = 23;
+            this.dgvCardInfo.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvCardInfo.Size = new System.Drawing.Size(994, 571);
+            this.dgvCardInfo.TabIndex = 2;
+            this.dgvCardInfo.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvCardInfo_CellClick);
+            // 
+            // pagerCardInfo
+            // 
+            this.pagerCardInfo.BackColor = System.Drawing.SystemColors.ActiveBorder;
+            this.pagerCardInfo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pagerCardInfo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(78)))), ((int)(((byte)(151)))));
+            this.pagerCardInfo.JumpText = "Go";
+            this.pagerCardInfo.Location = new System.Drawing.Point(0, 0);
+            this.pagerCardInfo.Name = "pagerCardInfo";
+            this.pagerCardInfo.PageIndex = 1;
+            this.pagerCardInfo.PageSize = 100;
+            this.pagerCardInfo.RecordCount = 0;
+            this.pagerCardInfo.Size = new System.Drawing.Size(994, 30);
+            this.pagerCardInfo.TabIndex = 0;
+            // 
+            // dataGridViewTextBoxColumn1
+            // 
+            this.dataGridViewTextBoxColumn1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.dataGridViewTextBoxColumn1.DataPropertyName = "Index";
+            this.dataGridViewTextBoxColumn1.FillWeight = 67.87527F;
+            this.dataGridViewTextBoxColumn1.HeaderText = "序号";
+            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+            this.dataGridViewTextBoxColumn1.ReadOnly = true;
+            this.dataGridViewTextBoxColumn1.Width = 60;
+            // 
+            // dataGridViewTextBoxColumn2
+            // 
+            this.dataGridViewTextBoxColumn2.DataPropertyName = "CardNo";
+            this.dataGridViewTextBoxColumn2.FillWeight = 67.87527F;
+            this.dataGridViewTextBoxColumn2.HeaderText = "IC卡编号";
+            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
+            this.dataGridViewTextBoxColumn2.ReadOnly = true;
+            // 
+            // dataGridViewTextBoxColumn3
+            // 
+            this.dataGridViewTextBoxColumn3.DataPropertyName = "Customer";
+            this.dataGridViewTextBoxColumn3.FillWeight = 67.87527F;
+            this.dataGridViewTextBoxColumn3.HeaderText = "商户名称";
+            this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
+            this.dataGridViewTextBoxColumn3.ReadOnly = true;
+            // 
+            // dataGridViewTextBoxColumn4
+            // 
+            this.dataGridViewTextBoxColumn4.DataPropertyName = "Status";
+            this.dataGridViewTextBoxColumn4.FillWeight = 67.87527F;
+            this.dataGridViewTextBoxColumn4.HeaderText = "状态";
+            this.dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
+            this.dataGridViewTextBoxColumn4.ReadOnly = true;
+            // 
+            // dataGridViewTextBoxColumn5
+            // 
+            this.dataGridViewTextBoxColumn5.DataPropertyName = "PersonInCharge";
+            this.dataGridViewTextBoxColumn5.FillWeight = 67.87527F;
+            this.dataGridViewTextBoxColumn5.HeaderText = "负责人";
+            this.dataGridViewTextBoxColumn5.Name = "dataGridViewTextBoxColumn5";
+            this.dataGridViewTextBoxColumn5.ReadOnly = true;
             // 
             // Column1
             // 
-            this.Column1.HeaderText = "序号";
+            this.Column1.DataPropertyName = "PhoneNo";
+            this.Column1.FillWeight = 67.87527F;
+            this.Column1.HeaderText = "手机号";
             this.Column1.Name = "Column1";
             this.Column1.ReadOnly = true;
-            this.Column1.Width = 54;
             // 
             // Column2
             // 
-            this.Column2.HeaderText = "IC卡编号";
+            this.Column2.DataPropertyName = "CreateDate";
+            this.Column2.FillWeight = 67.87527F;
+            this.Column2.HeaderText = "开卡时间";
             this.Column2.Name = "Column2";
             this.Column2.ReadOnly = true;
-            this.Column2.Width = 78;
             // 
-            // Column3
+            // dataGridViewButtonColumn1
             // 
-            this.Column3.HeaderText = "商户名称";
-            this.Column3.Name = "Column3";
-            this.Column3.ReadOnly = true;
-            this.Column3.Width = 78;
-            // 
-            // Column4
-            // 
-            this.Column4.HeaderText = "状态";
-            this.Column4.Name = "Column4";
-            this.Column4.ReadOnly = true;
-            this.Column4.Width = 54;
-            // 
-            // Column5
-            // 
-            this.Column5.HeaderText = "负责人";
-            this.Column5.Name = "Column5";
-            this.Column5.ReadOnly = true;
-            this.Column5.Width = 66;
-            // 
-            // Column6
-            // 
-            this.Column6.HeaderText = "手机号";
-            this.Column6.Name = "Column6";
-            this.Column6.ReadOnly = true;
-            this.Column6.Width = 66;
-            // 
-            // Column7
-            // 
-            this.Column7.HeaderText = "开卡时间";
-            this.Column7.Name = "Column7";
-            this.Column7.ReadOnly = true;
-            this.Column7.Width = 78;
-            // 
-            // Column8
-            // 
+            this.dataGridViewButtonColumn1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.dataGridViewButtonColumn1.DataPropertyName = "Action";
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
             dataGridViewCellStyle1.NullValue = "编辑";
-            this.Column8.DefaultCellStyle = dataGridViewCellStyle1;
-            this.Column8.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.Column8.HeaderText = "操作";
-            this.Column8.Name = "Column8";
-            this.Column8.ReadOnly = true;
-            this.Column8.Text = "";
-            this.Column8.Width = 35;
+            this.dataGridViewButtonColumn1.DefaultCellStyle = dataGridViewCellStyle1;
+            this.dataGridViewButtonColumn1.FillWeight = 10F;
+            this.dataGridViewButtonColumn1.HeaderText = "操作";
+            this.dataGridViewButtonColumn1.Name = "dataGridViewButtonColumn1";
+            this.dataGridViewButtonColumn1.ReadOnly = true;
+            this.dataGridViewButtonColumn1.Width = 80;
             // 
             // FormMain
             // 
@@ -430,14 +464,15 @@
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.plBase.ResumeLayout(false);
+            this.plBottom.ResumeLayout(false);
             this.plCenter.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvUserInfo)).EndInit();
             this.plTop.ResumeLayout(false);
             this.plTop.PerformLayout();
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvCommodity)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvCardInfo)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -456,31 +491,32 @@
         private System.Windows.Forms.Button btnSearch;
         private System.Windows.Forms.TextBox tbxPhoneNo;
         private System.Windows.Forms.TextBox tbxStatus;
-        private System.Windows.Forms.TextBox tbxUserName;
         private System.Windows.Forms.TextBox tbxCardNo;
         private System.Windows.Forms.Panel plTop;
         private System.Windows.Forms.Panel plCenter;
-        private System.Windows.Forms.DataGridView dgvUserInfo;
         private System.Windows.Forms.Panel plBottom;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridView dgvCommodity;
+        private System.Windows.Forms.Panel plBottom1;
+        private TActionProject.PagerControl pagerCardInfo;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column9;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column10;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column11;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column12;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column13;
         private System.Windows.Forms.DataGridViewButtonColumn Column14;
-        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.DataGridView dgvCardInfo;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column5;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column6;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column7;
-        private System.Windows.Forms.DataGridViewButtonColumn Column8;
+        private System.Windows.Forms.DataGridViewButtonColumn dataGridViewButtonColumn1;
     }
 }
 
