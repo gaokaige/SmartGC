@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 
 namespace SmartGC.Lib
 {
     internal class ReadCardLib
     {
+        #region CARD API
         /// <summary>
         /// 打开读写器，建立读写器与PC之间的连接
         /// </summary>
@@ -28,8 +29,8 @@ namespace SmartGC.Lib
         /// <summary>
         /// 控制蜂鸣器
         /// </summary>
-        /// <param name="icdev"></param>
-        /// <param name="msec"></param>
+        /// <param name="icdev">读卡器设备</param>
+        /// <param name="msec">鸣叫时长（毫秒）</param>
         /// <returns></returns>
         [DllImport("mwhrf_bj.dll", EntryPoint = "rf_beep", SetLastError = true,
                CharSet = CharSet.Auto, ExactSpelling = false,
@@ -148,5 +149,80 @@ namespace SmartGC.Lib
             CallingConvention = CallingConvention.StdCall)]
         public static extern Int16 rf_changeb3(int icdev, int sector, [MarshalAs(UnmanagedType.LPArray)]byte[] keya, int B0, int B1,
               int B2, int B3, int Bk, [MarshalAs(UnmanagedType.LPArray)]byte[] keyb);
+        #endregion
+
+        #region C#
+        internal delegate void SendMessageHandler(string msg);
+        internal event SendMessageHandler OnSendMessage;
+
+        internal delegate void ConnHandler();
+        internal event ConnHandler OnConnOK;
+
+        internal delegate void DisConnHandler();
+        internal event DisConnHandler OnDisConn;
+
+        internal delegate void ReadCardNoHandler(string cardNo);
+        internal event ReadCardNoHandler OnReadCardNo;
+
+
+        int icdev;// 读卡器设备id
+        byte[] snr = new byte[5];
+        int istr;
+        string str;
+
+        internal void ConnectUsbDev()
+        {
+            icdev = rf_usbopen();
+            if (icdev > 0)
+            {
+                byte[] status = new byte[30];
+                istr = rf_get_status(icdev, status);
+                //lbHardVer.Text=System.Text.Encoding.ASCII.GetString(status);
+                str = System.Text.Encoding.Default.GetString(status);
+                OnSendMessage("设备连接成功.硬件版本号：" + str);
+                OnConnOK();
+                rf_beep(icdev, 10);
+            }
+            else
+            {
+                OnSendMessage("设备连接失败，请重试.");
+                rf_beep(icdev, 10);
+                rf_beep(icdev, 10);
+            }
+
+        }
+        internal string GetCardNo()
+        {
+            string cardNo = string.Empty;
+
+            istr = rf_card(icdev, 1, snr);
+            if (istr != 0)
+            {
+                OnSendMessage("读卡失败,请将卡片放置于读卡区域.");
+            }
+            else
+            {
+                byte[] snr1 = new byte[8];
+                
+                hex_a(snr, snr1, 4);
+                string no = System.Text.Encoding.Default.GetString(snr1);
+                rf_beep(icdev, 10);
+                OnSendMessage("读卡成功,卡号：" + no);
+                OnReadCardNo(no);
+            }
+
+            return cardNo;
+        }
+
+        internal void DisconnectUsbDev()
+        {
+            istr = rf_usbclose(icdev);
+            if (istr == 0)
+            {
+                OnDisConn();
+                OnSendMessage("成功断开连接！");
+            }
+        }
+        #endregion
     }
 }
