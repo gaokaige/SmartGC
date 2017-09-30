@@ -31,34 +31,45 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.tsmiDev = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiConnect = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiDisconnect = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiSetting = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiAbout = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiWriteCard = new System.Windows.Forms.ToolStripMenuItem();
             this.plBase = new System.Windows.Forms.Panel();
             this.plCenter = new System.Windows.Forms.Panel();
             this.dgvCardInfo = new System.Windows.Forms.DataGridView();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewButtonColumn1 = new System.Windows.Forms.DataGridViewButtonColumn();
             this.plBottom = new System.Windows.Forms.Panel();
+            this.pagerCardInfo = new TActionProject.PagerControl();
             this.plTop = new System.Windows.Forms.Panel();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.combStatus = new System.Windows.Forms.ComboBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.btnRead = new System.Windows.Forms.Button();
+            this.lbMessage = new System.Windows.Forms.Label();
+            this.tbxCustomer = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.btnSearch = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.tbxPhoneNo = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.tbxStatus = new System.Windows.Forms.TextBox();
             this.tbxCardNo = new System.Windows.Forms.TextBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.plBottom1 = new System.Windows.Forms.Panel();
+            this.pagerCommodity = new TActionProject.PagerControl();
             this.dgvCommodity = new System.Windows.Forms.DataGridView();
             this.Column9 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column10 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -66,13 +77,6 @@
             this.Column12 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column13 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column14 = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.tsmiDev = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiConnect = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiDisconnect = new System.Windows.Forms.ToolStripMenuItem();
-            this.lbMessage = new System.Windows.Forms.Label();
-            this.btnRead = new System.Windows.Forms.Button();
-            this.label5 = new System.Windows.Forms.Label();
-            this.pagerCardInfo = new TActionProject.PagerControl();
             this.menuStrip1.SuspendLayout();
             this.plBase.SuspendLayout();
             this.plCenter.SuspendLayout();
@@ -82,6 +86,7 @@
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            this.plBottom1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvCommodity)).BeginInit();
             this.SuspendLayout();
             // 
@@ -90,12 +95,36 @@
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiDev,
             this.tsmiSetting,
-            this.tsmiAbout});
+            this.tsmiAbout,
+            this.tsmiWriteCard});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1008, 25);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
+            // 
+            // tsmiDev
+            // 
+            this.tsmiDev.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiConnect,
+            this.tsmiDisconnect});
+            this.tsmiDev.Name = "tsmiDev";
+            this.tsmiDev.Size = new System.Drawing.Size(56, 21);
+            this.tsmiDev.Text = "读卡器";
+            // 
+            // tsmiConnect
+            // 
+            this.tsmiConnect.Name = "tsmiConnect";
+            this.tsmiConnect.Size = new System.Drawing.Size(100, 22);
+            this.tsmiConnect.Text = "连接";
+            this.tsmiConnect.Click += new System.EventHandler(this.tsmiConnect_Click);
+            // 
+            // tsmiDisconnect
+            // 
+            this.tsmiDisconnect.Name = "tsmiDisconnect";
+            this.tsmiDisconnect.Size = new System.Drawing.Size(100, 22);
+            this.tsmiDisconnect.Text = "断开";
+            this.tsmiDisconnect.Click += new System.EventHandler(this.tsmiDisconnect_Click);
             // 
             // tsmiSetting
             // 
@@ -111,6 +140,13 @@
             this.tsmiAbout.Text = "关于";
             this.tsmiAbout.Click += new System.EventHandler(this.tsmiAbout_Click);
             // 
+            // tsmiWriteCard
+            // 
+            this.tsmiWriteCard.Name = "tsmiWriteCard";
+            this.tsmiWriteCard.Size = new System.Drawing.Size(44, 21);
+            this.tsmiWriteCard.Text = "写卡";
+            this.tsmiWriteCard.Click += new System.EventHandler(this.tsmiWriteCard_Click);
+            // 
             // plBase
             // 
             this.plBase.Controls.Add(this.plCenter);
@@ -118,7 +154,7 @@
             this.plBase.Dock = System.Windows.Forms.DockStyle.Fill;
             this.plBase.Location = new System.Drawing.Point(3, 3);
             this.plBase.Name = "plBase";
-            this.plBase.Size = new System.Drawing.Size(994, 601);
+            this.plBase.Size = new System.Drawing.Size(994, 233);
             this.plBase.TabIndex = 1;
             // 
             // plCenter
@@ -127,7 +163,7 @@
             this.plCenter.Dock = System.Windows.Forms.DockStyle.Fill;
             this.plCenter.Location = new System.Drawing.Point(0, 0);
             this.plCenter.Name = "plCenter";
-            this.plCenter.Size = new System.Drawing.Size(994, 571);
+            this.plCenter.Size = new System.Drawing.Size(994, 203);
             this.plCenter.TabIndex = 14;
             // 
             // dgvCardInfo
@@ -142,10 +178,12 @@
             this.dataGridViewTextBoxColumn1,
             this.dataGridViewTextBoxColumn2,
             this.dataGridViewTextBoxColumn3,
+            this.Column3,
             this.dataGridViewTextBoxColumn4,
             this.dataGridViewTextBoxColumn5,
             this.Column1,
             this.Column2,
+            this.Column4,
             this.dataGridViewButtonColumn1});
             this.dgvCardInfo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvCardInfo.Location = new System.Drawing.Point(0, 0);
@@ -155,7 +193,7 @@
             this.dgvCardInfo.RowHeadersVisible = false;
             this.dgvCardInfo.RowTemplate.Height = 23;
             this.dgvCardInfo.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvCardInfo.Size = new System.Drawing.Size(994, 571);
+            this.dgvCardInfo.Size = new System.Drawing.Size(994, 203);
             this.dgvCardInfo.TabIndex = 2;
             this.dgvCardInfo.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvCardInfo_CellClick);
             // 
@@ -184,6 +222,14 @@
             this.dataGridViewTextBoxColumn3.HeaderText = "商户名称";
             this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
             this.dataGridViewTextBoxColumn3.ReadOnly = true;
+            // 
+            // Column3
+            // 
+            this.Column3.DataPropertyName = "Address";
+            this.Column3.HeaderText = "address";
+            this.Column3.Name = "Column3";
+            this.Column3.ReadOnly = true;
+            this.Column3.Visible = false;
             // 
             // dataGridViewTextBoxColumn4
             // 
@@ -217,6 +263,14 @@
             this.Column2.Name = "Column2";
             this.Column2.ReadOnly = true;
             // 
+            // Column4
+            // 
+            this.Column4.DataPropertyName = "Remark";
+            this.Column4.HeaderText = "remark";
+            this.Column4.Name = "Column4";
+            this.Column4.ReadOnly = true;
+            this.Column4.Visible = false;
+            // 
             // dataGridViewButtonColumn1
             // 
             this.dataGridViewButtonColumn1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
@@ -234,24 +288,38 @@
             // 
             this.plBottom.Controls.Add(this.pagerCardInfo);
             this.plBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.plBottom.Location = new System.Drawing.Point(0, 571);
+            this.plBottom.Location = new System.Drawing.Point(0, 203);
             this.plBottom.Name = "plBottom";
             this.plBottom.Size = new System.Drawing.Size(994, 30);
             this.plBottom.TabIndex = 13;
             // 
+            // pagerCardInfo
+            // 
+            this.pagerCardInfo.BackColor = System.Drawing.SystemColors.ActiveBorder;
+            this.pagerCardInfo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pagerCardInfo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(78)))), ((int)(((byte)(151)))));
+            this.pagerCardInfo.JumpText = "Go";
+            this.pagerCardInfo.Location = new System.Drawing.Point(0, 0);
+            this.pagerCardInfo.Name = "pagerCardInfo";
+            this.pagerCardInfo.PageIndex = 1;
+            this.pagerCardInfo.PageSize = 100;
+            this.pagerCardInfo.RecordCount = 0;
+            this.pagerCardInfo.Size = new System.Drawing.Size(994, 30);
+            this.pagerCardInfo.TabIndex = 0;
+            // 
             // plTop
             // 
+            this.plTop.Controls.Add(this.combStatus);
             this.plTop.Controls.Add(this.label5);
             this.plTop.Controls.Add(this.btnRead);
             this.plTop.Controls.Add(this.lbMessage);
-            this.plTop.Controls.Add(this.textBox1);
+            this.plTop.Controls.Add(this.tbxCustomer);
             this.plTop.Controls.Add(this.label1);
             this.plTop.Controls.Add(this.label2);
             this.plTop.Controls.Add(this.btnSearch);
             this.plTop.Controls.Add(this.label3);
             this.plTop.Controls.Add(this.tbxPhoneNo);
             this.plTop.Controls.Add(this.label4);
-            this.plTop.Controls.Add(this.tbxStatus);
             this.plTop.Controls.Add(this.tbxCardNo);
             this.plTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.plTop.Location = new System.Drawing.Point(0, 25);
@@ -259,12 +327,55 @@
             this.plTop.Size = new System.Drawing.Size(1008, 72);
             this.plTop.TabIndex = 10;
             // 
-            // textBox1
+            // combStatus
             // 
-            this.textBox1.Location = new System.Drawing.Point(285, 13);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 21);
-            this.textBox1.TabIndex = 9;
+            this.combStatus.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.combStatus.FormattingEnabled = true;
+            this.combStatus.Items.AddRange(new object[] {
+            "",
+            "绑定",
+            "未绑定"});
+            this.combStatus.Location = new System.Drawing.Point(98, 39);
+            this.combStatus.Name = "combStatus";
+            this.combStatus.Size = new System.Drawing.Size(197, 20);
+            this.combStatus.TabIndex = 13;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(580, 16);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(65, 12);
+            this.label5.TabIndex = 12;
+            this.label5.Text = "系统消息：";
+            // 
+            // btnRead
+            // 
+            this.btnRead.Location = new System.Drawing.Point(481, 12);
+            this.btnRead.Name = "btnRead";
+            this.btnRead.Size = new System.Drawing.Size(75, 23);
+            this.btnRead.TabIndex = 11;
+            this.btnRead.Text = "读卡";
+            this.btnRead.UseVisualStyleBackColor = true;
+            this.btnRead.Click += new System.EventHandler(this.btnRead_Click);
+            // 
+            // lbMessage
+            // 
+            this.lbMessage.AutoSize = true;
+            this.lbMessage.Font = new System.Drawing.Font("宋体", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lbMessage.ForeColor = System.Drawing.Color.Green;
+            this.lbMessage.Location = new System.Drawing.Point(600, 37);
+            this.lbMessage.Name = "lbMessage";
+            this.lbMessage.Size = new System.Drawing.Size(106, 24);
+            this.lbMessage.TabIndex = 10;
+            this.lbMessage.Text = "欢迎使用";
+            // 
+            // tbxCustomer
+            // 
+            this.tbxCustomer.Location = new System.Drawing.Point(374, 13);
+            this.tbxCustomer.Name = "tbxCustomer";
+            this.tbxCustomer.Size = new System.Drawing.Size(100, 21);
+            this.tbxCustomer.TabIndex = 9;
             // 
             // label1
             // 
@@ -278,7 +389,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(223, 17);
+            this.label2.Location = new System.Drawing.Point(302, 17);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(65, 12);
             this.label2.TabIndex = 1;
@@ -286,7 +397,7 @@
             // 
             // btnSearch
             // 
-            this.btnSearch.Location = new System.Drawing.Point(413, 37);
+            this.btnSearch.Location = new System.Drawing.Point(481, 38);
             this.btnSearch.Name = "btnSearch";
             this.btnSearch.Size = new System.Drawing.Size(75, 23);
             this.btnSearch.TabIndex = 8;
@@ -299,13 +410,13 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(26, 43);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(41, 12);
+            this.label3.Size = new System.Drawing.Size(65, 12);
             this.label3.TabIndex = 2;
-            this.label3.Text = "状态：";
+            this.label3.Text = "绑定状态：";
             // 
             // tbxPhoneNo
             // 
-            this.tbxPhoneNo.Location = new System.Drawing.Point(285, 39);
+            this.tbxPhoneNo.Location = new System.Drawing.Point(374, 39);
             this.tbxPhoneNo.Name = "tbxPhoneNo";
             this.tbxPhoneNo.Size = new System.Drawing.Size(100, 21);
             this.tbxPhoneNo.TabIndex = 7;
@@ -313,26 +424,21 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(223, 43);
+            this.label4.Location = new System.Drawing.Point(302, 43);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(53, 12);
+            this.label4.Size = new System.Drawing.Size(65, 12);
             this.label4.TabIndex = 3;
-            this.label4.Text = "手机号：";
-            // 
-            // tbxStatus
-            // 
-            this.tbxStatus.Location = new System.Drawing.Point(98, 39);
-            this.tbxStatus.Name = "tbxStatus";
-            this.tbxStatus.Size = new System.Drawing.Size(100, 21);
-            this.tbxStatus.TabIndex = 6;
+            this.label4.Text = "手 机 号：";
             // 
             // tbxCardNo
             // 
             this.tbxCardNo.Location = new System.Drawing.Point(98, 13);
+            this.tbxCardNo.MaxLength = 32;
             this.tbxCardNo.Name = "tbxCardNo";
             this.tbxCardNo.ReadOnly = true;
-            this.tbxCardNo.Size = new System.Drawing.Size(100, 21);
+            this.tbxCardNo.Size = new System.Drawing.Size(197, 21);
             this.tbxCardNo.TabIndex = 4;
+            this.tbxCardNo.DoubleClick += new System.EventHandler(this.tbxCardNo_DoubleClick);
             // 
             // tabControl1
             // 
@@ -345,7 +451,7 @@
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.Padding = new System.Drawing.Point(0, 0);
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(1008, 633);
+            this.tabControl1.Size = new System.Drawing.Size(1008, 265);
             this.tabControl1.TabIndex = 2;
             // 
             // tabPage1
@@ -354,7 +460,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1000, 607);
+            this.tabPage1.Size = new System.Drawing.Size(1000, 239);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "  开卡管理  ";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -366,18 +472,34 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(1000, 607);
+            this.tabPage2.Size = new System.Drawing.Size(1000, 239);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "  积分兑换  ";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // plBottom1
             // 
+            this.plBottom1.Controls.Add(this.pagerCommodity);
             this.plBottom1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.plBottom1.Location = new System.Drawing.Point(3, 574);
+            this.plBottom1.Location = new System.Drawing.Point(3, 206);
             this.plBottom1.Name = "plBottom1";
             this.plBottom1.Size = new System.Drawing.Size(994, 30);
             this.plBottom1.TabIndex = 14;
+            // 
+            // pagerCommodity
+            // 
+            this.pagerCommodity.BackColor = System.Drawing.SystemColors.ActiveBorder;
+            this.pagerCommodity.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pagerCommodity.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(78)))), ((int)(((byte)(151)))));
+            this.pagerCommodity.JumpText = "Go";
+            this.pagerCommodity.Location = new System.Drawing.Point(0, 0);
+            this.pagerCommodity.Name = "pagerCommodity";
+            this.pagerCommodity.PageIndex = 1;
+            this.pagerCommodity.PageSize = 100;
+            this.pagerCommodity.RecordCount = 0;
+            this.pagerCommodity.Size = new System.Drawing.Size(994, 30);
+            this.pagerCommodity.TabIndex = 1;
+            this.pagerCommodity.OnPageChanged += new System.EventHandler(this.pagerCommodity_OnPageChanged);
             // 
             // dgvCommodity
             // 
@@ -401,8 +523,9 @@
             this.dgvCommodity.ReadOnly = true;
             this.dgvCommodity.RowHeadersVisible = false;
             this.dgvCommodity.RowTemplate.Height = 23;
-            this.dgvCommodity.Size = new System.Drawing.Size(994, 601);
+            this.dgvCommodity.Size = new System.Drawing.Size(994, 233);
             this.dgvCommodity.TabIndex = 1;
+            this.dgvCommodity.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvCommodity_CellClick);
             // 
             // Column9
             // 
@@ -444,78 +567,11 @@
             this.Column14.ReadOnly = true;
             this.Column14.Width = 80;
             // 
-            // tsmiDev
-            // 
-            this.tsmiDev.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsmiConnect,
-            this.tsmiDisconnect});
-            this.tsmiDev.Name = "tsmiDev";
-            this.tsmiDev.Size = new System.Drawing.Size(44, 21);
-            this.tsmiDev.Text = "设备";
-            // 
-            // tsmiConnect
-            // 
-            this.tsmiConnect.Name = "tsmiConnect";
-            this.tsmiConnect.Size = new System.Drawing.Size(100, 22);
-            this.tsmiConnect.Text = "连接";
-            this.tsmiConnect.Click += new System.EventHandler(this.tsmiConnect_Click);
-            // 
-            // tsmiDisconnect
-            // 
-            this.tsmiDisconnect.Name = "tsmiDisconnect";
-            this.tsmiDisconnect.Size = new System.Drawing.Size(100, 22);
-            this.tsmiDisconnect.Text = "断开";
-            this.tsmiDisconnect.Click += new System.EventHandler(this.tsmiDisconnect_Click);
-            // 
-            // lbMessage
-            // 
-            this.lbMessage.AutoSize = true;
-            this.lbMessage.Font = new System.Drawing.Font("宋体", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lbMessage.ForeColor = System.Drawing.Color.Green;
-            this.lbMessage.Location = new System.Drawing.Point(555, 36);
-            this.lbMessage.Name = "lbMessage";
-            this.lbMessage.Size = new System.Drawing.Size(106, 24);
-            this.lbMessage.TabIndex = 10;
-            this.lbMessage.Text = "欢迎使用";
-            // 
-            // btnRead
-            // 
-            this.btnRead.Location = new System.Drawing.Point(413, 12);
-            this.btnRead.Name = "btnRead";
-            this.btnRead.Size = new System.Drawing.Size(75, 23);
-            this.btnRead.TabIndex = 11;
-            this.btnRead.Text = "读卡";
-            this.btnRead.UseVisualStyleBackColor = true;
-            this.btnRead.Click += new System.EventHandler(this.btnRead_Click);
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(559, 16);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(65, 12);
-            this.label5.TabIndex = 12;
-            this.label5.Text = "系统消息：";
-            // 
-            // pagerCardInfo
-            // 
-            this.pagerCardInfo.BackColor = System.Drawing.SystemColors.ActiveBorder;
-            this.pagerCardInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pagerCardInfo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(78)))), ((int)(((byte)(151)))));
-            this.pagerCardInfo.JumpText = "Go";
-            this.pagerCardInfo.Location = new System.Drawing.Point(0, 0);
-            this.pagerCardInfo.Name = "pagerCardInfo";
-            this.pagerCardInfo.PageIndex = 1;
-            this.pagerCardInfo.PageSize = 100;
-            this.pagerCardInfo.RecordCount = 0;
-            this.pagerCardInfo.Size = new System.Drawing.Size(994, 30);
-            this.pagerCardInfo.TabIndex = 0;
-            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1008, 730);
+            this.ClientSize = new System.Drawing.Size(1008, 362);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.plTop);
             this.Controls.Add(this.menuStrip1);
@@ -537,6 +593,7 @@
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
+            this.plBottom1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvCommodity)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -555,7 +612,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button btnSearch;
         private System.Windows.Forms.TextBox tbxPhoneNo;
-        private System.Windows.Forms.TextBox tbxStatus;
         private System.Windows.Forms.TextBox tbxCardNo;
         private System.Windows.Forms.Panel plTop;
         private System.Windows.Forms.Panel plCenter;
@@ -572,22 +628,27 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column12;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column13;
         private System.Windows.Forms.DataGridViewButtonColumn Column14;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox tbxCustomer;
         private System.Windows.Forms.DataGridView dgvCardInfo;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
-        private System.Windows.Forms.DataGridViewButtonColumn dataGridViewButtonColumn1;
         private System.Windows.Forms.ToolStripMenuItem tsmiDev;
         private System.Windows.Forms.ToolStripMenuItem tsmiConnect;
         private System.Windows.Forms.ToolStripMenuItem tsmiDisconnect;
         private System.Windows.Forms.Label lbMessage;
         private System.Windows.Forms.Button btnRead;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.ComboBox combStatus;
+        private TActionProject.PagerControl pagerCommodity;
+        private System.Windows.Forms.ToolStripMenuItem tsmiWriteCard;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn4;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn5;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
+        private System.Windows.Forms.DataGridViewButtonColumn dataGridViewButtonColumn1;
     }
 }
 

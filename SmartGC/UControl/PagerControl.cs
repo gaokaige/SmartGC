@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Text;
 using System.Windows.Forms;
 
 namespace TActionProject
@@ -263,6 +258,12 @@ namespace TActionProject
                 isTextChanged = false;
                 lnkFirst_LinkClicked(null, null);
             }
+        }
+
+        private void PagerControl_Load(object sender, EventArgs e)
+        {
+            lblTotalCount.Text = "0";
+            txtPageSize.Text = pageSize.ToString();
         }
     }
 }

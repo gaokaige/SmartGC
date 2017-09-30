@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading;
 
 namespace SmartGC.Lib
 {
-    internal class ReadCardLib
+    public class CardApi
     {
         #region CARD API
         /// <summary>
@@ -77,7 +74,13 @@ namespace SmartGC.Lib
              CharSet = CharSet.Auto, ExactSpelling = false,
              CallingConvention = CallingConvention.StdCall)]
         public static extern Int16 rf_reset(int icdev, int msec);
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="icdev"></param>
+        /// <param name="mode"></param>
+        /// <param name="tagtype"></param>
+        /// <returns></returns>
         [DllImport("mwhrf_bj.dll", EntryPoint = "rf_request", SetLastError = true,
              CharSet = CharSet.Auto, ExactSpelling = false,
              CallingConvention = CallingConvention.StdCall)]
@@ -151,26 +154,39 @@ namespace SmartGC.Lib
               int B2, int B3, int Bk, [MarshalAs(UnmanagedType.LPArray)]byte[] keyb);
         #endregion
 
-        #region C#
-        internal delegate void SendMessageHandler(string msg);
-        internal event SendMessageHandler OnSendMessage;
-
-        internal delegate void ConnHandler();
-        internal event ConnHandler OnConnOK;
-
-        internal delegate void DisConnHandler();
-        internal event DisConnHandler OnDisConn;
-
-        internal delegate void ReadCardNoHandler(string cardNo);
-        internal event ReadCardNoHandler OnReadCardNo;
-
-
-        int icdev;// 读卡器设备id
-        byte[] snr = new byte[5];
+        #region C# Function
+        public delegate void SendMessageHandler(string msg);
+        /// <summary>
+        /// 传送消息
+        /// </summary>
+        public event SendMessageHandler OnSendMessage;
+        public delegate void ConnHandler();
+        /// <summary>
+        /// 读卡器连接成功时发生
+        /// </summary>
+        public event ConnHandler OnConnOK;
+        public delegate void DisConnHandler();
+        /// <summary>
+        /// 读卡器断开连接成功时发生
+        /// </summary>
+        public event DisConnHandler OnDisConn;
+        public delegate void ReadCardNoHandler(string cardNo);
+        /// <summary>
+        /// 读取卡片ID成功时发生
+        /// </summary>
+        public event ReadCardNoHandler OnReadCardNo;
+        /// <summary>
+        /// 读卡器设备id
+        /// </summary>
+        int icdev;
+        byte[] snr = new byte[5];// 卡序列号5字节
+        byte[] cno = new byte[16];// 卡号16字节
         int istr;
         string str;
-
-        internal void ConnectUsbDev()
+        /// <summary>
+        /// 连接读卡器
+        /// </summary>
+        public void ConnectUsbDev()
         {
             icdev = rf_usbopen();
             if (icdev > 0)
@@ -189,38 +205,61 @@ namespace SmartGC.Lib
                 rf_beep(icdev, 10);
                 rf_beep(icdev, 10);
             }
-
         }
-        internal string GetCardNo()
+        /// <summary>
+        /// 读卡获取卡ID
+        /// </summary>
+        /// <returns></returns>
+        public void GetCardNo()
         {
             string cardNo = string.Empty;
 
             istr = rf_card(icdev, 1, snr);
             if (istr != 0)
             {
-                OnSendMessage("读卡失败,请将卡片放置于读卡区域.");
+                OnSendMessage("卡激活失败,请将卡片放置于读卡区域.");
             }
             else
             {
-                byte[] snr1 = new byte[8];
-                
-                hex_a(snr, snr1, 4);
-                string no = System.Text.Encoding.Default.GetString(snr1);
+                //byte[] snr1 = new byte[8];
+                //hex_a(snr, snr1, 4);
+                //string no = System.Text.Encoding.Default.GetString(snr1);
+
+                byte[] acno = new byte[16];
+                rf_read(icdev, 2, cno);
+                rf_halt(icdev);
+                hex_a(cno, acno, 8);
+                string no = System.Text.Encoding.Default.GetString(acno);
                 rf_beep(icdev, 10);
                 OnSendMessage("读卡成功,卡号：" + no);
                 OnReadCardNo(no);
             }
-
-            return cardNo;
         }
-
-        internal void DisconnectUsbDev()
+        /// <summary>
+        /// 断开读卡器
+        /// </summary>
+        public void DisconnectUsbDev()
         {
             istr = rf_usbclose(icdev);
             if (istr == 0)
             {
                 OnDisConn();
                 OnSendMessage("成功断开连接！");
+            }
+        }
+
+        public void WriteCard(byte[] data)
+        {
+            istr = rf_card(icdev, 1, snr);
+            if (istr != 0)
+            {
+                OnSendMessage("卡激活失败.");
+            }
+            else
+            {
+                rf_write(icdev, 2, data);
+                rf_halt(icdev);
+                rf_beep(icdev, 50);
             }
         }
         #endregion

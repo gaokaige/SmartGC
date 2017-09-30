@@ -230,6 +230,7 @@
             this.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(78)))), ((int)(((byte)(151)))));
             this.Name = "PagerControl";
             this.Size = new System.Drawing.Size(601, 29);
+            this.Load += new System.EventHandler(this.PagerControl_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

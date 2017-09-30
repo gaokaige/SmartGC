@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿
 namespace SmartGC.Lib
 {
     internal class CardInfo
@@ -11,7 +7,7 @@ namespace SmartGC.Lib
         /// <summary>
         /// IC卡编号
         /// </summary>
-        public string CardNo
+        internal string CardNo
         {
             get { return cardNo; }
             set { cardNo = value; }
@@ -20,7 +16,7 @@ namespace SmartGC.Lib
         /// <summary>
         /// 商户名称
         /// </summary>
-        public string Customer
+        internal string Customer
         {
             get { return customer; }
             set { customer = value; }
@@ -29,7 +25,7 @@ namespace SmartGC.Lib
         /// <summary>
         /// 地址
         /// </summary>
-        public string Address
+        internal string Address
         {
             get { return address; }
             set { address = value; }
@@ -38,7 +34,7 @@ namespace SmartGC.Lib
         /// <summary>
         /// 负责人
         /// </summary>
-        public string PersonInCharge
+        internal string PersonInCharge
         {
             get { return personInCharge; }
             set { personInCharge = value; }
@@ -47,7 +43,7 @@ namespace SmartGC.Lib
         /// <summary>
         /// 手机号
         /// </summary>
-        public string PhoneNo
+        internal string PhoneNo
         {
             get { return phoneNo; }
             set { phoneNo = value; }
@@ -56,16 +52,25 @@ namespace SmartGC.Lib
         /// <summary>
         /// 开卡时间
         /// </summary>
-        public string CreateDate
+        internal string CreateDate
         {
             get { return createDate; }
             set { createDate = value; }
+        }
+        bool status;
+        /// <summary>
+        /// 是否绑定
+        /// </summary>
+        public bool Status
+        {
+            get { return status; }
+            set { status = value; }
         }
         string remarks;
         /// <summary>
         /// 备注
         /// </summary>
-        public string Remarks
+        internal string Remarks
         {
             get { return remarks; }
             set { remarks = value; }

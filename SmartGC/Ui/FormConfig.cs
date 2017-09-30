@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
+﻿using SmartGC.Lib;
+using System;
 using System.Windows.Forms;
 
 namespace SmartGC.Ui
@@ -16,15 +11,22 @@ namespace SmartGC.Ui
             InitializeComponent();
         }
 
-        private void btnOK_Click(object sender, EventArgs e)
+        private void FormConfig_Load(object sender, EventArgs e)
         {
-            ConfigSave();
-            this.Close();
+            tbxServer.Text = Configs.Server;
+            tbxToken.Text = Configs.Token;
+            cbxLogenable.Checked = Configs.LogEnable;
+            cbxExpect100Continue.Checked = Configs.Expect100Continue;
         }
 
-        private void ConfigSave()
+        private void btnOK_Click(object sender, EventArgs e)
         {
-            
+            Configs.Server = tbxServer.Text;
+            Configs.Token = tbxToken.Text;
+            Configs.LogEnable = cbxLogenable.Checked;
+            Configs.Expect100Continue = cbxExpect100Continue.Checked;
+            Configs.Save();
+            this.Close();
         }
     }
 }

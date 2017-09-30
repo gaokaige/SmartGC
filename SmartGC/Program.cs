@@ -23,6 +23,7 @@ namespace SmartGC
 
             if (noInstance)
             {
+                SmartGC.Lib.Configs.Init();
                 Application.Run(new FormLogin());
             }
             else
@@ -30,6 +31,7 @@ namespace SmartGC
                 MessageBox.Show("程序已经启动，请不要同时运行多次。");
                 Application.Exit();
             }
+         
         }
     }
 }

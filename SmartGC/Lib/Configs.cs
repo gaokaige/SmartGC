@@ -1,67 +1,89 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Text;
+﻿using System.Configuration;
 using System.Windows.Forms;
 
 namespace SmartGC.Lib
 {
-    internal static class Config
+    internal static class Configs
     {
+        static string server;
+        /// <summary>
+        /// 查询卡详情接口地址
+        /// </summary>
+        internal static string Server
+        {
+            get { return Configs.server; }
+            set { Configs.server = value; }
+        }
+        static string token;
+        /// <summary>
+        /// 服务器令牌
+        /// </summary>
+        public static string Token
+        {
+            get { return Configs.token; }
+            set { Configs.token = value; }
+        }
         static bool logEnable;
         /// <summary>
         /// 是否保存日志
         /// </summary>
-        public static bool LogEnable
+        internal static bool LogEnable
         {
             get { return logEnable; }
             set { logEnable = value; }
-        }
-        static string cardServer;
-        /// <summary>
-        /// 查询卡详情接口地址
-        /// </summary>
-        public static string CardServer
-        {
-            get { return Config.cardServer; }
-            set { Config.cardServer = value; }
-        }
-        static string commodityServer;
-        /// <summary>
-        /// 查询兑换物品信息接口
-        /// </summary>
-        public static string CommodityServer
-        {
-            get { return Config.commodityServer; }
-            set { Config.commodityServer = value; }
         }
         static string lastUser;
         /// <summary>
         /// 上次登录用户
         /// </summary>
-        public static string LastUser
+        internal static string LastUser
         {
-            get { return Config.lastUser; }
-            set { Config.lastUser = value; }
+            get { return Configs.lastUser; }
+            set { Configs.lastUser = value; }
         }
-        internal static void Init()
-        { 
-            
-        }
-        public static string fileName = System.IO.Path.GetFileName(Application.ExecutablePath);
-        public static string GetSetting(string key)
+        static bool expect100Continue;
+        /// <summary>
+        /// 于服务器通讯时，Expect100Continue的设置
+        /// </summary>
+        public static bool Expect100Continue
         {
-            Configuration config = System.Configuration.ConfigurationManager.OpenExeConfiguration(fileName);
-            string value = config.AppSettings.Settings[key].Value;
-            return value;
+            get { return Configs.expect100Continue; }
+            set { Configs.expect100Continue = value; }
+        }
+        static int pagesize;
+        /// <summary>
+        /// 每个页面记录数
+        /// </summary>
+        public static int Pagesize
+        {
+            get { return Configs.pagesize; }
+            set { Configs.pagesize = value; }
         }
 
-        public static bool UpdateSetting(string key, string newValue)
+
+        internal static string configFile = System.IO.Path.GetFileName(Application.ExecutablePath);
+
+        internal static void Init()
         {
-            Configuration config = System.Configuration.ConfigurationManager.OpenExeConfiguration(fileName);
-            string value = config.AppSettings.Settings[key].Value = newValue;
+            Configuration config = System.Configuration.ConfigurationManager.OpenExeConfiguration(configFile);
+            server = config.AppSettings.Settings["Server"].Value;
+            token = RsaCode.Decrypt(config.AppSettings.Settings["Token"].Value);
+            lastUser = config.AppSettings.Settings["LastUser"].Value;
+            logEnable = bool.Parse(config.AppSettings.Settings["LogEnable"].Value);
+            expect100Continue = bool.Parse(config.AppSettings.Settings["Expect100Continue"].Value);
+            pagesize = int.Parse(config.AppSettings.Settings["Pagesize"].Value);
+        }
+
+        internal static void Save()
+        {
+            Configuration config = System.Configuration.ConfigurationManager.OpenExeConfiguration(configFile);
+            config.AppSettings.Settings["Server"].Value = server;
+            config.AppSettings.Settings["Token"].Value = RsaCode.Encryption(token);
+            config.AppSettings.Settings["LastUser"].Value = lastUser;
+            config.AppSettings.Settings["LogEnable"].Value = logEnable.ToString();
+            config.AppSettings.Settings["LogEnable"].Value = expect100Continue.ToString();
+            config.AppSettings.Settings["Pagesize"].Value = pagesize.ToString();
             config.Save();
-            return true;
         }
     }
 }
