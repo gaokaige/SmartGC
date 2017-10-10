@@ -19,12 +19,14 @@ namespace SmartGC.Ui
         {
             InitializeComponent();
             cardNo = _cardNo;
+            label1.Visible = true;
         }
 
         public FormCardInfo(DataRow _row)
         {
             InitializeComponent();
             row = _row;
+            label1.Visible = false;
         }
 
         private void FormCardBinding_Load(object sender, EventArgs e)

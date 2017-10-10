@@ -57,11 +57,11 @@ namespace SmartGC.Lib
             get { return createDate; }
             set { createDate = value; }
         }
-        bool status;
+        CardStatus status;
         /// <summary>
         /// 是否绑定
         /// </summary>
-        public bool Status
+        public CardStatus Status
         {
             get { return status; }
             set { status = value; }
@@ -75,5 +75,21 @@ namespace SmartGC.Lib
             get { return remarks; }
             set { remarks = value; }
         }
+    }
+
+    public enum CardStatus
+    { 
+        /// <summary>
+        /// 绑定
+        /// </summary>
+        Y,
+        /// <summary>
+        /// 未绑定
+        /// </summary>
+        N,
+        /// <summary>
+        /// 未知
+        /// </summary>
+        X
     }
 }

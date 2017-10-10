@@ -17,14 +17,23 @@ namespace SmartGC.Ui
             tbxToken.Text = Configs.Token;
             cbxLogenable.Checked = Configs.LogEnable;
             cbxExpect100Continue.Checked = Configs.Expect100Continue;
+            tbxPagesize.Text = Configs.Pagesize.ToString();
+
         }
 
         private void btnOK_Click(object sender, EventArgs e)
         {
+            int pagesize ;
+            if (!int.TryParse(tbxPagesize.Text, out pagesize))
+            {
+                tbxPagesize.Text = "20";
+                MessageBox.Show("每页记录数请输入数字");
+            }
             Configs.Server = tbxServer.Text;
             Configs.Token = tbxToken.Text;
             Configs.LogEnable = cbxLogenable.Checked;
             Configs.Expect100Continue = cbxExpect100Continue.Checked;
+            Configs.Pagesize = int.Parse(tbxPagesize.Text);
             Configs.Save();
             this.Close();
         }

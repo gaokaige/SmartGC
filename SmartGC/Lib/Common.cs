@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Data;
 using System.IO;
 using System.Net;
 using System.Text;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace SmartGC.Lib
 {
@@ -46,11 +46,13 @@ namespace SmartGC.Lib
         /// <returns></returns>
         public static DataTable GetCardInfoByCardNo(string cardNo)
         {
+            DataTable dt = GetCardTable();
             // 发送
-            //string data={"serviceMethod":"select","serviceName":"com.cygps.dubbo.creditCard.ICreditService","serviceBody":{"cardNo":15,"telNo":100000,"id":100001}} 
+            //string data={"serviceMethod":"select","serviceName":"com.cygps.dubbo.creditCard.ICreditService","serviceBody":{"cardNo":"541215464646546"}}
             JObject json = new JObject();
             JObject jcredit = new JObject();
             jcredit.Add("cardNo", cardNo);
+
             JToken serviceMethod, serviceName, serviceBody;
             serviceMethod = "select";
             serviceName = "com.cygps.dubbo.creditCard.ICreditService";
@@ -63,25 +65,33 @@ namespace SmartGC.Lib
             string postData = "data=" + json.ToString();
             string rt = PostData(Configs.Server, postData);
 
-            // 接收
-            JToken jCardNo, jCredit, jName;
-            json = (JObject)JsonConvert.DeserializeObject(rt);
-            json.TryGetValue("cardNo", out jCardNo);
-            json.TryGetValue("credit", out jCredit);
-            json.TryGetValue("name", out jName);
-            DataTable dt = GetCardTable();
-            //demo
-            dt.Rows.Add(new object[10] 
-            {   1
-                , "0000000000001"//jCardNo.ToString()
-                , "张三的面馆"
-                , "已绑定"
-                , "北京市海淀区林翠桥"
-                , "张三", "13801012020"
-                , "2017-08-10"
-                , "编辑"
-                , "这里显示备注内容" });
+            // 解析
+            json = JObject.Parse(rt);
+            if (json.Count == 0 || (int)(json["code"]) == -1)
+                return dt;
+            JArray jlist = JArray.Parse(json["array"].ToString());
 
+            JObject tempo;
+            JToken remark;
+            string ts;
+            for (int i = 0; i < jlist.Count; i++)
+            {
+                tempo = JObject.Parse(jlist[i].ToString());  
+                ts = tempo["_saveTime"].ToString();// 时间戳
+                ts = ts.Substring(0, ts.Length - 3);
+                remark = tempo.TryGetValue("remark",out remark);
+                dt.Rows.Add(new object[10] 
+            {   i + 1
+                , tempo["cardNo"].ToString()
+                , tempo["name"].ToString()
+                , tempo["status"].ToString() == "Y" ? "已绑定" : "未绑定"
+                , tempo["address"].ToString()
+                , tempo["personLiable"].ToString()
+                , tempo["phoneNumber"].ToString()
+                , GetTime(ts)
+                , "编辑"
+                , remark.ToString() == "False" ? "" : remark.ToString()});
+            }
             return dt;
         }
         /// <summary>
@@ -93,15 +103,27 @@ namespace SmartGC.Lib
         /// <returns></returns>
         public static DataTable GetCardInfoList(CardInfo cardInfo, int pagesize, int pageindex, out int total)
         {
+            DataTable dt = GetCardTable();
             // 发送
-            //string data={"serviceMethod":"select","serviceName":"com.cygps.dubbo.creditCard.ICreditService","serviceBody":{"cardNo":15,"telNo":100000,"id":100001}} 
+            //string data={"serviceMethod":"selectByPage","serviceName":"com.cygps.dubbo.creditCard.ICreditService","serviceBody":{"name":"哈哈面","status":"Y","_pageSize":10,"_page":1,"_sortField":"credit","_number":-1}} 
             JObject json = new JObject();
-            JObject jcredit = new JObject();
-            jcredit.Add("cardNo", cardInfo.CardNo);
+            JObject jPamarm = new JObject();
+            if (!string.IsNullOrEmpty(cardInfo.Customer))
+                jPamarm.Add("*name", cardInfo.Customer);
+            if (cardInfo.Status != CardStatus.X)
+                jPamarm.Add("status", cardInfo.Status.ToString());
+
+            if (!string.IsNullOrEmpty(cardInfo.PhoneNo))
+                jPamarm.Add("*phoneNumber", cardInfo.PhoneNo);
+            jPamarm.Add("_pageSize", pagesize);// 必要
+            jPamarm.Add("_page", pageindex);// 必要
+            jPamarm.Add("_sortField", "credit");// 排序字段 非必
+            jPamarm.Add("_number", -1);//  1正序 -1倒序 非必
+
             JToken serviceMethod, serviceName, serviceBody;
-            serviceMethod = "select";
+            serviceMethod = "selectByPage";
             serviceName = "com.cygps.dubbo.creditCard.ICreditService";
-            serviceBody = jcredit;
+            serviceBody = jPamarm;
 
             json.Add("serviceMethod", serviceMethod);
             json.Add("serviceName", serviceName);
@@ -111,28 +133,53 @@ namespace SmartGC.Lib
             string rt = PostData(Configs.Server, postData);
 
             // 接收
-            JToken jCardNo, jCredit, jName;
-            json = (JObject)JsonConvert.DeserializeObject(rt);
-            json.TryGetValue("cardNo", out jCardNo);
-            json.TryGetValue("credit", out jCredit);
-            json.TryGetValue("name", out jName);
-            DataTable dt = GetCardTable();
-
-            int j = pagesize * (pageindex - 1);
-            for (int i = 0; i < pagesize; i++)
+            // 解析
+            json = JObject.Parse(rt);
+            if (json.Count == 0 || (int)(json["code"]) == -1)
             {
-                dt.Rows.Add(new object[10] 
-                {   i + j + 1 // 序号
-                    , "000000000000"+i//jCardNo.ToString()
-                    , "张三的面馆"
-                    , "已绑定"
-                    , "北京市海淀区林翠桥"
-                    , "张三", "13801012020"
-                    , "2017-08-12"
-                    , "编辑"
-                    , "这里显示备注内容" });
+                total = 0;
+                return dt;
             }
-            total = 100;
+            JArray jlist = JArray.Parse(json["array"].ToString());
+
+            JObject tempo;
+            JToken jRemark, jCardNo;
+            string ts;// 开卡时间戳13位处理成10位
+            string remark, cardNo;
+            int j = pagesize * (pageindex - 1);
+
+            for (int i = 0; i < jlist.Count; i++)
+            {
+                tempo = JObject.Parse(jlist[i].ToString());
+
+                if (!tempo.TryGetValue("cardNo", out jCardNo))
+                    cardNo = "";
+                else
+                    cardNo = jCardNo.ToString();
+
+                if (!tempo.TryGetValue("remark", out jRemark))
+                    remark = string.Empty;
+                else
+                    remark = jRemark.ToString();
+
+                ts = tempo["_saveTime"].ToString();// 时间戳
+                ts = ts.Substring(0, ts.Length - 3);
+                
+                dt.Rows.Add(new object[10] 
+                {   
+                    i + j + 1
+                    , cardNo
+                    , tempo["name"].ToString()
+                    , tempo["status"].ToString()=="Y" ? "已绑定" : "未绑定"
+                    , tempo["address"].ToString()
+                    , tempo["personLiable"].ToString()
+                    , tempo["phoneNumber"].ToString()
+                    , GetTime(ts)
+                    , "编辑"
+                    , remark
+                });
+            }
+            total = int.Parse(json["total"].ToString());
             return dt;
         }
         /// <summary>
@@ -142,13 +189,17 @@ namespace SmartGC.Lib
         /// <returns></returns>
         public static DataTable GetCommodityInfoList(int pagesize, int pageindex, out int total)
         {
+            DataTable dt = GetCommodityTable();
             JObject json = new JObject();
-            JObject jcredit = new JObject();
-            //jcredit.Add("cardNo", cardInfo.CardNo);
+            JObject jParam = new JObject();
+            jParam.Add("isPublish", "Y");
+            jParam.Add("_pageSize", pagesize);
+            jParam.Add("_page", pageindex);
+
             JToken serviceMethod, serviceName, serviceBody;
-            serviceMethod = "select";
-            serviceName = "com.cygps.dubbo.creditCard.ICreditService";
-            serviceBody = jcredit;
+            serviceMethod = "selectByPage";
+            serviceName = "com.cygps.dubbo.creditGift.IGiftInfoService";
+            serviceBody = jParam;
 
             json.Add("serviceMethod", serviceMethod);
             json.Add("serviceName", serviceName);
@@ -156,14 +207,41 @@ namespace SmartGC.Lib
 
             string postData = "data=" + json.ToString();
             string rt = PostData(Configs.Server, postData);
-
-            DataTable dt = GetCommodityTable();
-            for (int i = 0; i < 50; i++)
+            json = JObject.Parse(rt);
+            if (json.Count == 0 || (int)(json["code"]) == -1 || (int)(json["total"]) == 0)
             {
-                dt.Rows.Add(new object[7] { "123", i + 1, "Iphone8" + (i + 1).ToString(), "苹果公司", "状态", "500", "兑换" });
+                total = 0;
+                return dt;
             }
-            total = 100;
+
+            JArray jlist = JArray.Parse(json["array"].ToString());
+
+            JObject tempo;
+            JToken remark;
+            string ts;
+
+            int j = pagesize * (pageindex - 1);
+
+            for (int i = 0; i < jlist.Count; i++)
+            {
+                tempo = JObject.Parse(jlist[i].ToString());
+                ts = tempo["_saveTime"].ToString();// 时间戳
+                ts = ts.Substring(0, ts.Length - 3);
+                remark = tempo.TryGetValue("remark", out remark);
+                dt.Rows.Add(new object[7] 
+            {   
+                tempo["gid"].ToString()
+                ,  (i + j + 1)
+                , tempo["name"].ToString()
+                , tempo["manufacturer"].ToString()
+                , tempo["giftType"].ToString()
+                , tempo["credit"].ToString()
+                , "兑换"
+            });
+            }
+            total = int.Parse(json["total"].ToString());
             return dt;
+
         }
 
         public static string PostData(string url, string data)
@@ -216,15 +294,26 @@ namespace SmartGC.Lib
         private static DataTable GetCommodityTable()
         {
             DataTable dt = new DataTable();
-            dt.Columns.Add("ID", typeof(Int32));
-            dt.Columns.Add("Index", typeof(Int32));
-            dt.Columns.Add("Name", typeof(string));
-            dt.Columns.Add("Manufacturer", typeof(string));
-            dt.Columns.Add("Status", typeof(string));
-            dt.Columns.Add("Score", typeof(string));
+            dt.Columns.Add("ID", typeof(string));//GID
+            dt.Columns.Add("Index", typeof(Int32));//序号
+            dt.Columns.Add("Name", typeof(string));//名称
+            dt.Columns.Add("Manufacturer", typeof(string));// 生产厂家
+            dt.Columns.Add("Type", typeof(string));//类型
+            dt.Columns.Add("Score", typeof(string));//兑换积分
             dt.Columns.Add("Exchange", typeof(string));
             return dt;
         }
-
+        /// <summary>
+        /// 时间戳转为C#格式时间
+        /// </summary>
+        /// <param name="timeStamp">Unix时间戳格式</param>
+        /// <returns>C#格式时间</returns>
+        public static DateTime GetTime(string timeStamp)
+        {
+            DateTime dtStart = TimeZone.CurrentTimeZone.ToLocalTime(new DateTime(1970, 1, 1));
+            long lTime = long.Parse(timeStamp + "0000000");
+            TimeSpan toNow = new TimeSpan(lTime);
+            return dtStart.Add(toNow);
+        }
     }
 }

@@ -50,7 +50,9 @@ namespace SmartGC.Ui
         private void FormMain_Load(object sender, EventArgs e)
         {
             pagerCardInfo.OnPageChanged += new EventHandler(pagerCardInfo_OnPageChanged);
-            tbxCardNo.Text = "CA0010000EEEFEEFEFECC0000000000F";
+#if DEBUG
+            tbxCardNo.Text = "CA0046FEFEFEFE000000000005911911";
+#endif
         }
 
         /// <summary>
@@ -147,11 +149,26 @@ namespace SmartGC.Ui
         /// <param name="e"></param>
         private void btnSearch_Click(object sender, EventArgs e)
         {
+            lbMessage.Text = "查询中...";
+            lbMessage.Refresh();
             card = new CardInfo();
             card.CardNo = tbxCardNo.Text;
             card.Customer = tbxCustomer.Text;
             card.PhoneNo = tbxPhoneNo.Text;
+            if (combStatus.SelectedIndex != -1)
+            {
+                if (combStatus.Items[combStatus.SelectedIndex].ToString() == "未绑定")
+                    card.Status = CardStatus.N;
+                else if (combStatus.Items[combStatus.SelectedIndex].ToString() == "绑定")
+                    card.Status = CardStatus.Y;
+                else
+                    card.Status = CardStatus.X;
+            }
+            else
+                card.Status = CardStatus.X;
+
             LoadCardInfo(card);
+            lbMessage.Text = "查询完毕";
         }
 
         /// <summary>
@@ -192,7 +209,7 @@ namespace SmartGC.Ui
             FormWriteCard frm = new FormWriteCard(api);
             frm.ShowDialog();
         }
-        
+
         private void tbxCardNo_DoubleClick(object sender, EventArgs e)
         {
             if (tbxCardNo.Text != string.Empty)
@@ -224,14 +241,14 @@ namespace SmartGC.Ui
         private void LoadCardInfo(CardInfo cardInfo)
         {
             int total = 0;
-            if (cardInfo.CardNo != string.Empty)
+            if (cardInfo.CardNo != string.Empty)// 卡号不为空时
             {
                 dtCardInfo = Common.GetCardInfoByCardNo(cardInfo.CardNo);
                 total = dtCardInfo.Rows.Count;
             }
             else
             {
-                dtCardInfo = Common.GetCardInfoList(cardInfo, pagerCardInfo.PageSize, pagerCardInfo.PageIndex ,out total);
+                dtCardInfo = Common.GetCardInfoList(cardInfo, pagerCardInfo.PageSize, pagerCardInfo.PageIndex, out total);
             }
 
             dgvCardInfo.DataSource = dtCardInfo;
@@ -243,29 +260,6 @@ namespace SmartGC.Ui
                 CreateAccount();
                 return;
             }
-            //dtCardInfo = Common.GetCardInfoByCardNo()
-            /*
-            dtCardInfo = Common.GetCardInfoByCardNo(cardInfo);
-
-            if (dtCardInfo.Rows.Count == 0)
-            { 
-                // 开卡
-                CreateAccount(cardInfo);
-                return;
-            }
-
-            DataTable dt = dtCardInfo.Clone();
-
-            DataRow[] rows = dtCardInfo.Select("Index>" + (pagerCardInfo.PageIndex - 1) * pagerCardInfo.PageSize + "and Index<=" + pagerCardInfo.PageIndex * pagerCardInfo.PageSize);
-
-            foreach (DataRow row in rows)
-            {
-                dt.Rows.Add(row.ItemArray);
-            }
-
-            dgvCardInfo.DataSource = dt;
-            pagerCardInfo.DrawControl(dtCardInfo.Rows.Count);
-             */
         }
         private void pagerCommodity_OnPageChanged(object sender, EventArgs e)
         {
@@ -307,12 +301,21 @@ namespace SmartGC.Ui
         private void dgvCommodity_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             // 点击编辑
-            if (dgvCardInfo.Columns[e.ColumnIndex].HeaderText == "兑换")
+            if (dgvCommodity.Columns[e.ColumnIndex].HeaderText == "兑换")
             {
                 DataTable dt = dtCommodityInfo.Clone();
-                DataRow[] rows = dtCommodityInfo.Select("Index=" + dgvCardInfo.Rows[e.RowIndex].Cells[0].Value);
+                DataRow[] rows = dtCommodityInfo.Select("Index=" + dgvCommodity.Rows[e.RowIndex].Cells[0].Value);
                 FormExchange frm = new FormExchange(rows[0]);
                 frm.ShowDialog();
+            }
+        }
+
+
+        private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (tabControl1.SelectedIndex == 1)
+            {
+                LoadCommodity();
             }
         }
     }
