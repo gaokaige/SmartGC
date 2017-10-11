@@ -23,7 +23,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -53,7 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Lib\CardInfo.cs" />
+    <Compile Include="Lib\Merchant.cs" />
     <Compile Include="Lib\Commodity.cs" />
     <Compile Include="Lib\Common.cs" />
     <Compile Include="Lib\Configs.cs" />
@@ -71,11 +71,11 @@
     <Compile Include="Ui\FormAbout.Designer.cs">
       <DependentUpon>FormAbout.cs</DependentUpon>
     </Compile>
-    <Compile Include="Ui\FormCardInfo.cs">
+    <Compile Include="Ui\FormMerchant.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Ui\FormCardInfo.Designer.cs">
-      <DependentUpon>FormCardInfo.cs</DependentUpon>
+    <Compile Include="Ui\FormMerchant.Designer.cs">
+      <DependentUpon>FormMerchant.cs</DependentUpon>
     </Compile>
     <Compile Include="Ui\FormExchange.cs">
       <SubType>Form</SubType>
@@ -115,8 +115,8 @@
     <EmbeddedResource Include="Ui\FormAbout.resx">
       <DependentUpon>FormAbout.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Ui\FormCardInfo.resx">
-      <DependentUpon>FormCardInfo.cs</DependentUpon>
+    <EmbeddedResource Include="Ui\FormMerchant.resx">
+      <DependentUpon>FormMerchant.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Ui\FormExchange.resx">
       <DependentUpon>FormExchange.cs</DependentUpon>
@@ -158,6 +158,9 @@
   <ItemGroup>
     <Content Include="app.ico" />
     <Content Include="mwhrf_bj.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="使用说明.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

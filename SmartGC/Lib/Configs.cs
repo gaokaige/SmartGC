@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
 using System.Windows.Forms;
 
 namespace SmartGC.Lib
@@ -61,29 +62,43 @@ namespace SmartGC.Lib
         }
 
 
-        internal static string configFile = System.IO.Path.GetFileName(Application.ExecutablePath);
+        public static string configFile = System.IO.Path.GetFileName(Application.ExecutablePath);
 
-        internal static void Init()
+        public static void Init()
         {
-            Configuration config = System.Configuration.ConfigurationManager.OpenExeConfiguration(configFile);
-            server = config.AppSettings.Settings["Server"].Value;
-            token = RsaCode.Decrypt(config.AppSettings.Settings["Token"].Value);
-            lastUser = config.AppSettings.Settings["LastUser"].Value;
-            logEnable = bool.Parse(config.AppSettings.Settings["LogEnable"].Value);
-            expect100Continue = bool.Parse(config.AppSettings.Settings["Expect100Continue"].Value);
-            pagesize = int.Parse(config.AppSettings.Settings["Pagesize"].Value);
+            try
+            {
+                Configuration config = System.Configuration.ConfigurationManager.OpenExeConfiguration(configFile);
+                server = config.AppSettings.Settings["Server"].Value;
+                token = config.AppSettings.Settings["Token"].Value;
+                lastUser = config.AppSettings.Settings["LastUser"].Value;
+                logEnable = bool.Parse(config.AppSettings.Settings["LogEnable"].Value);
+                expect100Continue = bool.Parse(config.AppSettings.Settings["Expect100Continue"].Value);
+                pagesize = int.Parse(config.AppSettings.Settings["Pagesize"].Value);
+            }
+            catch
+            {
+                MessageBox.Show("读取配置错误");
+            }
         }
 
-        internal static void Save()
+        public static void Save()
         {
-            Configuration config = System.Configuration.ConfigurationManager.OpenExeConfiguration(configFile);
-            config.AppSettings.Settings["Server"].Value = server;
-            config.AppSettings.Settings["Token"].Value = RsaCode.Encryption(token);
-            config.AppSettings.Settings["LastUser"].Value = lastUser;
-            config.AppSettings.Settings["LogEnable"].Value = logEnable.ToString();
-            config.AppSettings.Settings["LogEnable"].Value = expect100Continue.ToString();
-            config.AppSettings.Settings["Pagesize"].Value = pagesize.ToString();
-            config.Save();
+            try
+            {
+                Configuration config = System.Configuration.ConfigurationManager.OpenExeConfiguration(configFile);
+                config.AppSettings.Settings["Server"].Value = server;
+                config.AppSettings.Settings["Token"].Value = token;
+                config.AppSettings.Settings["LastUser"].Value = lastUser;
+                config.AppSettings.Settings["LogEnable"].Value = logEnable.ToString();
+                config.AppSettings.Settings["LogEnable"].Value = expect100Continue.ToString();
+                config.AppSettings.Settings["Pagesize"].Value = pagesize.ToString();
+                config.Save();
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show("保存配置错误:"+ex.Message);
+            }
         }
     }
 }

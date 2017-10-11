@@ -32,16 +32,17 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.tsmiSetting = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiDev = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiConnect = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiDisconnect = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiSetting = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiWriteCard = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.plBase = new System.Windows.Forms.Panel();
             this.plCenter = new System.Windows.Forms.Panel();
-            this.dgvCardInfo = new System.Windows.Forms.DataGridView();
+            this.dgvMerchant = new System.Windows.Forms.DataGridView();
             this.plBottom = new System.Windows.Forms.Panel();
+            this.pagerMerchant = new TActionProject.PagerControl();
             this.plTop = new System.Windows.Forms.Panel();
             this.combStatus = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
@@ -59,6 +60,7 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.plBottom1 = new System.Windows.Forms.Panel();
+            this.pagerCommodity = new TActionProject.PagerControl();
             this.dgvCommodity = new System.Windows.Forms.DataGridView();
             this.Column9 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ID = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -68,6 +70,7 @@
             this.Column13 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column14 = new System.Windows.Forms.DataGridViewButtonColumn();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -77,12 +80,10 @@
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewButtonColumn1 = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.pagerCardInfo = new TActionProject.PagerControl();
-            this.pagerCommodity = new TActionProject.PagerControl();
             this.menuStrip1.SuspendLayout();
             this.plBase.SuspendLayout();
             this.plCenter.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvCardInfo)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvMerchant)).BeginInit();
             this.plBottom.SuspendLayout();
             this.plTop.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -105,6 +106,13 @@
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
+            // tsmiSetting
+            // 
+            this.tsmiSetting.Name = "tsmiSetting";
+            this.tsmiSetting.Size = new System.Drawing.Size(44, 21);
+            this.tsmiSetting.Text = "设置";
+            this.tsmiSetting.Click += new System.EventHandler(this.tsmiSetting_Click);
+            // 
             // tsmiDev
             // 
             this.tsmiDev.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -117,30 +125,16 @@
             // tsmiConnect
             // 
             this.tsmiConnect.Name = "tsmiConnect";
-            this.tsmiConnect.Size = new System.Drawing.Size(152, 22);
+            this.tsmiConnect.Size = new System.Drawing.Size(100, 22);
             this.tsmiConnect.Text = "连接";
             this.tsmiConnect.Click += new System.EventHandler(this.tsmiConnect_Click);
             // 
             // tsmiDisconnect
             // 
             this.tsmiDisconnect.Name = "tsmiDisconnect";
-            this.tsmiDisconnect.Size = new System.Drawing.Size(152, 22);
+            this.tsmiDisconnect.Size = new System.Drawing.Size(100, 22);
             this.tsmiDisconnect.Text = "断开";
             this.tsmiDisconnect.Click += new System.EventHandler(this.tsmiDisconnect_Click);
-            // 
-            // tsmiSetting
-            // 
-            this.tsmiSetting.Name = "tsmiSetting";
-            this.tsmiSetting.Size = new System.Drawing.Size(44, 21);
-            this.tsmiSetting.Text = "设置";
-            this.tsmiSetting.Click += new System.EventHandler(this.tsmiSetting_Click);
-            // 
-            // tsmiAbout
-            // 
-            this.tsmiAbout.Name = "tsmiAbout";
-            this.tsmiAbout.Size = new System.Drawing.Size(44, 21);
-            this.tsmiAbout.Text = "关于";
-            this.tsmiAbout.Click += new System.EventHandler(this.tsmiAbout_Click);
             // 
             // tsmiWriteCard
             // 
@@ -148,6 +142,13 @@
             this.tsmiWriteCard.Size = new System.Drawing.Size(44, 21);
             this.tsmiWriteCard.Text = "写卡";
             this.tsmiWriteCard.Click += new System.EventHandler(this.tsmiWriteCard_Click);
+            // 
+            // tsmiAbout
+            // 
+            this.tsmiAbout.Name = "tsmiAbout";
+            this.tsmiAbout.Size = new System.Drawing.Size(44, 21);
+            this.tsmiAbout.Text = "关于";
+            this.tsmiAbout.Click += new System.EventHandler(this.tsmiAbout_Click);
             // 
             // plBase
             // 
@@ -161,7 +162,7 @@
             // 
             // plCenter
             // 
-            this.plCenter.Controls.Add(this.dgvCardInfo);
+            this.plCenter.Controls.Add(this.dgvMerchant);
             this.plCenter.Dock = System.Windows.Forms.DockStyle.Fill;
             this.plCenter.Location = new System.Drawing.Point(0, 0);
             this.plCenter.Name = "plCenter";
@@ -170,14 +171,15 @@
             // 
             // dgvCardInfo
             // 
-            this.dgvCardInfo.AllowUserToAddRows = false;
-            this.dgvCardInfo.AllowUserToDeleteRows = false;
-            this.dgvCardInfo.AllowUserToResizeRows = false;
-            this.dgvCardInfo.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dgvCardInfo.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.dgvCardInfo.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvCardInfo.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dgvMerchant.AllowUserToAddRows = false;
+            this.dgvMerchant.AllowUserToDeleteRows = false;
+            this.dgvMerchant.AllowUserToResizeRows = false;
+            this.dgvMerchant.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvMerchant.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.dgvMerchant.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvMerchant.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.dataGridViewTextBoxColumn1,
+            this.Column5,
             this.dataGridViewTextBoxColumn2,
             this.dataGridViewTextBoxColumn3,
             this.Column3,
@@ -187,26 +189,40 @@
             this.Column2,
             this.Column4,
             this.dataGridViewButtonColumn1});
-            this.dgvCardInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvCardInfo.Location = new System.Drawing.Point(0, 0);
-            this.dgvCardInfo.MultiSelect = false;
-            this.dgvCardInfo.Name = "dgvCardInfo";
-            this.dgvCardInfo.ReadOnly = true;
-            this.dgvCardInfo.RowHeadersVisible = false;
-            this.dgvCardInfo.RowTemplate.Height = 23;
-            this.dgvCardInfo.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvCardInfo.Size = new System.Drawing.Size(994, 203);
-            this.dgvCardInfo.TabIndex = 2;
-            this.dgvCardInfo.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvCardInfo_CellClick);
+            this.dgvMerchant.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgvMerchant.Location = new System.Drawing.Point(0, 0);
+            this.dgvMerchant.MultiSelect = false;
+            this.dgvMerchant.Name = "dgvCardInfo";
+            this.dgvMerchant.ReadOnly = true;
+            this.dgvMerchant.RowHeadersVisible = false;
+            this.dgvMerchant.RowTemplate.Height = 23;
+            this.dgvMerchant.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvMerchant.Size = new System.Drawing.Size(994, 203);
+            this.dgvMerchant.TabIndex = 2;
+            this.dgvMerchant.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvCardInfo_CellClick);
             // 
             // plBottom
             // 
-            this.plBottom.Controls.Add(this.pagerCardInfo);
+            this.plBottom.Controls.Add(this.pagerMerchant);
             this.plBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.plBottom.Location = new System.Drawing.Point(0, 203);
             this.plBottom.Name = "plBottom";
             this.plBottom.Size = new System.Drawing.Size(994, 30);
             this.plBottom.TabIndex = 13;
+            // 
+            // pagerCardInfo
+            // 
+            this.pagerMerchant.BackColor = System.Drawing.SystemColors.ActiveBorder;
+            this.pagerMerchant.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pagerMerchant.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(78)))), ((int)(((byte)(151)))));
+            this.pagerMerchant.JumpText = "Go";
+            this.pagerMerchant.Location = new System.Drawing.Point(0, 0);
+            this.pagerMerchant.Name = "pagerCardInfo";
+            this.pagerMerchant.PageIndex = 1;
+            this.pagerMerchant.PageSize = 100;
+            this.pagerMerchant.RecordCount = 0;
+            this.pagerMerchant.Size = new System.Drawing.Size(994, 30);
+            this.pagerMerchant.TabIndex = 0;
             // 
             // plTop
             // 
@@ -388,6 +404,21 @@
             this.plBottom1.Size = new System.Drawing.Size(994, 30);
             this.plBottom1.TabIndex = 14;
             // 
+            // pagerCommodity
+            // 
+            this.pagerCommodity.BackColor = System.Drawing.SystemColors.ActiveBorder;
+            this.pagerCommodity.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pagerCommodity.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(78)))), ((int)(((byte)(151)))));
+            this.pagerCommodity.JumpText = "Go";
+            this.pagerCommodity.Location = new System.Drawing.Point(0, 0);
+            this.pagerCommodity.Name = "pagerCommodity";
+            this.pagerCommodity.PageIndex = 1;
+            this.pagerCommodity.PageSize = 100;
+            this.pagerCommodity.RecordCount = 0;
+            this.pagerCommodity.Size = new System.Drawing.Size(994, 30);
+            this.pagerCommodity.TabIndex = 1;
+            this.pagerCommodity.OnPageChanged += new System.EventHandler(this.pagerCommodity_OnPageChanged);
+            // 
             // dgvCommodity
             // 
             this.dgvCommodity.AllowUserToAddRows = false;
@@ -482,6 +513,14 @@
             this.dataGridViewTextBoxColumn1.ReadOnly = true;
             this.dataGridViewTextBoxColumn1.Width = 60;
             // 
+            // Column5
+            // 
+            this.Column5.DataPropertyName = "id";
+            this.Column5.HeaderText = "cardID";
+            this.Column5.Name = "Column5";
+            this.Column5.ReadOnly = true;
+            this.Column5.Visible = false;
+            // 
             // dataGridViewTextBoxColumn2
             // 
             this.dataGridViewTextBoxColumn2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
@@ -561,35 +600,6 @@
             this.dataGridViewButtonColumn1.ReadOnly = true;
             this.dataGridViewButtonColumn1.Width = 80;
             // 
-            // pagerCardInfo
-            // 
-            this.pagerCardInfo.BackColor = System.Drawing.SystemColors.ActiveBorder;
-            this.pagerCardInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pagerCardInfo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(78)))), ((int)(((byte)(151)))));
-            this.pagerCardInfo.JumpText = "Go";
-            this.pagerCardInfo.Location = new System.Drawing.Point(0, 0);
-            this.pagerCardInfo.Name = "pagerCardInfo";
-            this.pagerCardInfo.PageIndex = 1;
-            this.pagerCardInfo.PageSize = 100;
-            this.pagerCardInfo.RecordCount = 0;
-            this.pagerCardInfo.Size = new System.Drawing.Size(994, 30);
-            this.pagerCardInfo.TabIndex = 0;
-            // 
-            // pagerCommodity
-            // 
-            this.pagerCommodity.BackColor = System.Drawing.SystemColors.ActiveBorder;
-            this.pagerCommodity.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pagerCommodity.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(78)))), ((int)(((byte)(151)))));
-            this.pagerCommodity.JumpText = "Go";
-            this.pagerCommodity.Location = new System.Drawing.Point(0, 0);
-            this.pagerCommodity.Name = "pagerCommodity";
-            this.pagerCommodity.PageIndex = 1;
-            this.pagerCommodity.PageSize = 100;
-            this.pagerCommodity.RecordCount = 0;
-            this.pagerCommodity.Size = new System.Drawing.Size(994, 30);
-            this.pagerCommodity.TabIndex = 1;
-            this.pagerCommodity.OnPageChanged += new System.EventHandler(this.pagerCommodity_OnPageChanged);
-            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -609,7 +619,7 @@
             this.menuStrip1.PerformLayout();
             this.plBase.ResumeLayout(false);
             this.plCenter.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvCardInfo)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvMerchant)).EndInit();
             this.plBottom.ResumeLayout(false);
             this.plTop.ResumeLayout(false);
             this.plTop.PerformLayout();
@@ -644,9 +654,9 @@
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.DataGridView dgvCommodity;
         private System.Windows.Forms.Panel plBottom1;
-        private TActionProject.PagerControl pagerCardInfo;
+        private TActionProject.PagerControl pagerMerchant;
         private System.Windows.Forms.TextBox tbxCustomer;
-        private System.Windows.Forms.DataGridView dgvCardInfo;
+        private System.Windows.Forms.DataGridView dgvMerchant;
         private System.Windows.Forms.ToolStripMenuItem tsmiDev;
         private System.Windows.Forms.ToolStripMenuItem tsmiConnect;
         private System.Windows.Forms.ToolStripMenuItem tsmiDisconnect;
@@ -664,6 +674,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column13;
         private System.Windows.Forms.DataGridViewButtonColumn Column14;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column5;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column3;

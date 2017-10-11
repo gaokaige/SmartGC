@@ -11,9 +11,9 @@ namespace SmartGC.Ui
         #region 变量定义
 
         /// <summary>
-        /// 卡片信息表
+        /// 商户信息表
         /// </summary>
-        DataTable dtCardInfo;
+        DataTable dtMerchant;
         /// <summary>
         /// 兑换品信息表
         /// </summary>
@@ -25,9 +25,19 @@ namespace SmartGC.Ui
         /// <summary>
         /// 读卡器连接状态
         /// </summary>
-        bool connDev = false;
-        CardInfo card;
+        public static bool connDev = false;
+        /// <summary>
+        /// 商户信息对象
+        /// </summary>
+        Merchant merchant;
+        /// <summary>
+        /// 卡号缓存
+        /// </summary>
         string cardNoCache;
+        /// <summary>
+        /// 事件暂停开关，防止与其他窗体的事件冲突
+        /// </summary>
+        bool eventPause = false;
         #endregion
 
         #region 窗体事件
@@ -40,18 +50,20 @@ namespace SmartGC.Ui
             api.OnSendMessage += lib_OnSendMessage;
             api.OnReadCardNo += lib_OnReadCardNo;
             // 禁止表格自动获取内容
-            dgvCardInfo.AutoGenerateColumns = false;
+            dgvMerchant.AutoGenerateColumns = false;
             dgvCommodity.AutoGenerateColumns = false;
             // 设置页面记录数
-            pagerCardInfo.PageSize = Configs.Pagesize;
+            pagerMerchant.PageSize = Configs.Pagesize;
             pagerCommodity.PageSize = Configs.Pagesize;
+            // 读取商品列表
+            LoadCommodity();
         }
 
         private void FormMain_Load(object sender, EventArgs e)
         {
-            pagerCardInfo.OnPageChanged += new EventHandler(pagerCardInfo_OnPageChanged);
+            pagerMerchant.OnPageChanged += new EventHandler(pagerMerchant_OnPageChanged);
 #if DEBUG
-            tbxCardNo.Text = "CA0046FEFEFEFE000000000005911911";
+            tbxCardNo.Text = "00000000000000000000000000000000";
 #endif
         }
 
@@ -71,16 +83,22 @@ namespace SmartGC.Ui
         #region 读卡器事件
         private void lib_OnDisConn()
         {
+            if (eventPause)
+                return;
             connDev = false;
         }
 
         private void lib_OnConnOK()
         {
+            if (eventPause)
+                return;
             connDev = true;
         }
 
         private void lib_OnSendMessage(string msg)
         {
+            if (eventPause)
+                return;
             if (lbMessage.InvokeRequired)
             {
                 lbMessage.Invoke(new SmartGC.Lib.CardApi.SendMessageHandler(lib_OnSendMessage), new object[] { msg });
@@ -93,6 +111,8 @@ namespace SmartGC.Ui
 
         private void lib_OnReadCardNo(string cardNo)
         {
+            if (eventPause)
+                return;
             if (tbxCardNo.InvokeRequired)
             {
                 tbxCardNo.Invoke(new SmartGC.Lib.CardApi.ReadCardNoHandler(lib_OnReadCardNo), new object[] { cardNo });
@@ -151,23 +171,23 @@ namespace SmartGC.Ui
         {
             lbMessage.Text = "查询中...";
             lbMessage.Refresh();
-            card = new CardInfo();
-            card.CardNo = tbxCardNo.Text;
-            card.Customer = tbxCustomer.Text;
-            card.PhoneNo = tbxPhoneNo.Text;
+            merchant = new Merchant();
+            merchant.CardNo = tbxCardNo.Text;
+            merchant.Name = tbxCustomer.Text;
+            merchant.PhoneNo = tbxPhoneNo.Text;
             if (combStatus.SelectedIndex != -1)
             {
                 if (combStatus.Items[combStatus.SelectedIndex].ToString() == "未绑定")
-                    card.Status = CardStatus.N;
+                    merchant.Status = CardBindingStatus.N;
                 else if (combStatus.Items[combStatus.SelectedIndex].ToString() == "绑定")
-                    card.Status = CardStatus.Y;
+                    merchant.Status = CardBindingStatus.Y;
                 else
-                    card.Status = CardStatus.X;
+                    merchant.Status = CardBindingStatus.X;
             }
             else
-                card.Status = CardStatus.X;
+                merchant.Status = CardBindingStatus.X;
 
-            LoadCardInfo(card);
+            LoadMerchant(merchant);
             lbMessage.Text = "查询完毕";
         }
 
@@ -230,35 +250,42 @@ namespace SmartGC.Ui
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void pagerCardInfo_OnPageChanged(object sender, EventArgs e)
+        private void pagerMerchant_OnPageChanged(object sender, EventArgs e)
         {
-            LoadCardInfo(card);
+            LoadMerchant(merchant);
         }
 
         /// <summary>
         /// 卡片信息数据绑定
         /// </summary>
-        private void LoadCardInfo(CardInfo cardInfo)
+        private void LoadMerchant(Merchant merchant)
         {
-            int total = 0;
-            if (cardInfo.CardNo != string.Empty)// 卡号不为空时
+            try
             {
-                dtCardInfo = Common.GetCardInfoByCardNo(cardInfo.CardNo);
-                total = dtCardInfo.Rows.Count;
-            }
-            else
-            {
-                dtCardInfo = Common.GetCardInfoList(cardInfo, pagerCardInfo.PageSize, pagerCardInfo.PageIndex, out total);
-            }
+                int total = 0;
+                if (merchant.CardNo != string.Empty)// 卡号不为空时
+                {
+                    dtMerchant = Common.GetMerchantByCardNo(merchant.CardNo);
+                    total = dtMerchant.Rows.Count;
+                }
+                else
+                {
+                    dtMerchant = Common.GetMerchantList(merchant, pagerMerchant.PageSize, pagerMerchant.PageIndex, out total);
+                }
 
-            dgvCardInfo.DataSource = dtCardInfo;
-            pagerCardInfo.DrawControl(total);
+                dgvMerchant.DataSource = dtMerchant;
+                pagerMerchant.DrawControl(total);
 
-            if (cardInfo.CardNo != string.Empty && dtCardInfo.Rows.Count == 0)
+                if (merchant.CardNo != string.Empty && dtMerchant.Rows.Count == 0)
+                {
+                    // 开户+绑定界面
+                    CreateAccount();
+                    return;
+                }
+            }
+            catch
             {
-                // 开卡
-                CreateAccount();
-                return;
+                MessageBox.Show("读取商户信息失败");
             }
         }
         private void pagerCommodity_OnPageChanged(object sender, EventArgs e)
@@ -268,36 +295,52 @@ namespace SmartGC.Ui
 
         private void LoadCommodity()
         {
-            int total = 0;
-            dtCommodityInfo = Common.GetCommodityInfoList(pagerCommodity.PageSize, pagerCommodity.PageIndex, out total);
-            dgvCommodity.DataSource = dtCommodityInfo;
-            pagerCommodity.DrawControl(total);
+            try
+            {
+                int total = 0;
+                dtCommodityInfo = Common.GetCommodityInfoList(pagerCommodity.PageSize, pagerCommodity.PageIndex, out total);
+                dgvCommodity.DataSource = dtCommodityInfo;
+                pagerCommodity.DrawControl(total);
+            }
+            catch
+            {
+                MessageBox.Show("读取商品列表失败");
+            }
         }
+        /// <summary>
+        /// 开户：新增商户+绑定IC卡
+        /// </summary>
         private void CreateAccount()
         {
-            FormCardInfo frm = new FormCardInfo(tbxCardNo.Text);
+            FormMerchant frm = new FormMerchant(tbxCardNo.Text);
             frm.ShowDialog();
         }
 
         /// <summary>
-        /// 表格操作事件，比如：编辑
+        /// 表格操作事件:编辑
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void dgvCardInfo_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             // 点击编辑
-            if (dgvCardInfo.Columns[e.ColumnIndex].HeaderText == "操作")
+            if (dgvMerchant.Columns[e.ColumnIndex].HeaderText == "操作")
             {
-                DataTable dt = dtCardInfo.Clone();
-                DataRow[] rows = dtCardInfo.Select("Index=" + dgvCardInfo.Rows[e.RowIndex].Cells[0].Value);
-                FormCardInfo frm = new FormCardInfo(rows[0]);
+                DataTable dt = dtMerchant.Clone();
+                DataRow[] rows = dtMerchant.Select("Index=" + dgvMerchant.Rows[e.RowIndex].Cells[0].Value);
+                eventPause = true;
+                FormMerchant frm = new FormMerchant(rows[0], api);
                 frm.ShowDialog();
+                eventPause = false;
             }
         }
 
         #endregion
-
+        /// <summary>
+        /// 表格操作事件:兑换
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void dgvCommodity_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             // 点击编辑
@@ -305,18 +348,20 @@ namespace SmartGC.Ui
             {
                 DataTable dt = dtCommodityInfo.Clone();
                 DataRow[] rows = dtCommodityInfo.Select("Index=" + dgvCommodity.Rows[e.RowIndex].Cells[0].Value);
-                FormExchange frm = new FormExchange(rows[0]);
+                eventPause = true;
+                FormExchange frm = new FormExchange(rows[0], api);
                 frm.ShowDialog();
+                eventPause = false;
             }
         }
 
 
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (tabControl1.SelectedIndex == 1)
-            {
-                LoadCommodity();
-            }
+            //if (tabControl1.SelectedIndex == 1)
+            //{
+            //    LoadCommodity();
+            //}
         }
     }
 }

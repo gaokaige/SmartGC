@@ -59,7 +59,13 @@ namespace SmartGC.Lib
              CharSet = CharSet.Auto, ExactSpelling = false,
              CallingConvention = CallingConvention.StdCall)]
         public static extern Int16 a_hex([MarshalAs(UnmanagedType.LPArray)]byte[] asc, [MarshalAs(UnmanagedType.LPArray)]byte[] hex, int len);
-
+        /// <summary>
+        /// 将16进制数转换为ASCII字符
+        /// </summary>
+        /// <param name="hex"></param>
+        /// <param name="asc"></param>
+        /// <param name="len"></param>
+        /// <returns></returns>
         [DllImport("mwhrf_bj.dll", EntryPoint = "hex_a", SetLastError = true,
              CharSet = CharSet.Auto, ExactSpelling = false,
              CallingConvention = CallingConvention.StdCall)]
@@ -107,7 +113,13 @@ namespace SmartGC.Lib
             CharSet = CharSet.Auto, ExactSpelling = false,
             CallingConvention = CallingConvention.StdCall)]
         public static extern Int16 rf_card(int icdev, int mode, [MarshalAs(UnmanagedType.LPArray)]byte[] snr);
-
+        /// <summary>
+        /// 验密 大于15扇区用rf_authentication_2
+        /// </summary>
+        /// <param name="icdev"></param>
+        /// <param name="mode">0</param>
+        /// <param name="secnr">扇区号</param>
+        /// <returns></returns>
         [DllImport("mwhrf_bj.dll", EntryPoint = "rf_authentication", SetLastError = true,
              CharSet = CharSet.Auto, ExactSpelling = false,
              CallingConvention = CallingConvention.StdCall)]
@@ -117,7 +129,13 @@ namespace SmartGC.Lib
              CharSet = CharSet.Auto, ExactSpelling = false,
              CallingConvention = CallingConvention.StdCall)]
         public static extern Int16 rf_authentication_2(int icdev, int mode, int keynr, int blocknr);
-
+        /// <summary>
+        /// 读取块的信息
+        /// </summary>
+        /// <param name="icdev"></param>
+        /// <param name="blocknr">块号</param>
+        /// <param name="databuff"></param>
+        /// <returns></returns>
         [DllImport("mwhrf_bj.dll", EntryPoint = "rf_read", SetLastError = true,
              CharSet = CharSet.Auto, ExactSpelling = false,
              CallingConvention = CallingConvention.StdCall)]
@@ -202,8 +220,8 @@ namespace SmartGC.Lib
             else
             {
                 OnSendMessage("设备连接失败，请重试.");
-                rf_beep(icdev, 10);
-                rf_beep(icdev, 10);
+                //rf_beep(icdev, 10);
+                //rf_beep(icdev, 10);
             }
         }
         /// <summary>
@@ -221,14 +239,13 @@ namespace SmartGC.Lib
             }
             else
             {
-                //byte[] snr1 = new byte[8];
-                //hex_a(snr, snr1, 4);
-                //string no = System.Text.Encoding.Default.GetString(snr1);
-
-                byte[] acno = new byte[16];
-                rf_read(icdev, 2, cno);
+                int a = rf_authentication(icdev, 0, 0);
+                Console.WriteLine(a);
+                byte[] acno = new byte[32];
+                int b = rf_read(icdev, 2, cno);
+                Console.WriteLine(b);
                 rf_halt(icdev);
-                hex_a(cno, acno, 8);
+                hex_a(cno, acno, 16);
                 string no = System.Text.Encoding.Default.GetString(acno);
                 rf_beep(icdev, 10);
                 OnSendMessage("读卡成功,卡号：" + no);
@@ -257,9 +274,13 @@ namespace SmartGC.Lib
             }
             else
             {
-                rf_write(icdev, 2, data);
-                rf_halt(icdev);
-                rf_beep(icdev, 50);
+                int au = rf_authentication(icdev, 0, 0);
+                if (au == 0)
+                {
+                    rf_write(icdev, 2, data);
+                    rf_halt(icdev);
+                    rf_beep(icdev, 50);
+                }
             }
         }
         #endregion

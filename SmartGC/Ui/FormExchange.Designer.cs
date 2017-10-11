@@ -42,6 +42,7 @@
             this.label6 = new System.Windows.Forms.Label();
             this.tbxScorePer = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
+            this.btnReadCard = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -88,6 +89,7 @@
             this.label5.Size = new System.Drawing.Size(53, 12);
             this.label5.TabIndex = 4;
             this.label5.Text = "现有积分";
+            this.label5.Visible = false;
             // 
             // btnExchage
             // 
@@ -145,6 +147,7 @@
             this.tbxScoreHave.Size = new System.Drawing.Size(199, 21);
             this.tbxScoreHave.TabIndex = 10;
             this.tbxScoreHave.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.tbxScoreHave.Visible = false;
             // 
             // label6
             // 
@@ -174,11 +177,22 @@
             this.label7.TabIndex = 12;
             this.label7.Text = "积分(个)";
             // 
+            // btnReadCard
+            // 
+            this.btnReadCard.Location = new System.Drawing.Point(117, 273);
+            this.btnReadCard.Name = "btnReadCard";
+            this.btnReadCard.Size = new System.Drawing.Size(75, 23);
+            this.btnReadCard.TabIndex = 14;
+            this.btnReadCard.Text = "读卡";
+            this.btnReadCard.UseVisualStyleBackColor = true;
+            this.btnReadCard.Click += new System.EventHandler(this.btnReadCard_Click);
+            // 
             // FormExchange
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(311, 306);
+            this.Controls.Add(this.btnReadCard);
             this.Controls.Add(this.tbxScorePer);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.label6);
@@ -220,5 +234,6 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox tbxScorePer;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Button btnReadCard;
     }
 }

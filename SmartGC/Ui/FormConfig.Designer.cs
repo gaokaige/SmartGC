@@ -66,16 +66,15 @@
             this.tbxServer.Name = "tbxServer";
             this.tbxServer.Size = new System.Drawing.Size(424, 21);
             this.tbxServer.TabIndex = 5;
-            this.tbxServer.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // tbxToken
             // 
             this.tbxToken.Location = new System.Drawing.Point(104, 88);
+            this.tbxToken.MaxLength = 9999;
             this.tbxToken.Name = "tbxToken";
-            this.tbxToken.PasswordChar = '#';
+            this.tbxToken.PasswordChar = '*';
             this.tbxToken.Size = new System.Drawing.Size(424, 21);
             this.tbxToken.TabIndex = 6;
-            this.tbxToken.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // btnOK
             // 
@@ -140,7 +139,6 @@
             this.tbxPagesize.Size = new System.Drawing.Size(424, 21);
             this.tbxPagesize.TabIndex = 16;
             this.tbxPagesize.Text = "20";
-            this.tbxPagesize.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // label6
             // 

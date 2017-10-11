@@ -1,31 +1,42 @@
-﻿
-namespace SmartGC.Lib
+﻿namespace SmartGC.Lib
 {
-    internal class CardInfo
+    /// <summary>
+    /// 商户信息
+    /// </summary>
+    public class Merchant
     {
+        string id;
+        /// <summary>
+        /// 商户唯一标识6位
+        /// </summary>
+        public string ID
+        {
+            get { return id; }
+            set { id = value; }
+        }
         string cardNo;
         /// <summary>
         /// IC卡编号
         /// </summary>
-        internal string CardNo
+        public string CardNo
         {
             get { return cardNo; }
             set { cardNo = value; }
         }
-        string customer;
+        string name;
         /// <summary>
         /// 商户名称
         /// </summary>
-        internal string Customer
+        public string Name
         {
-            get { return customer; }
-            set { customer = value; }
+            get { return name; }
+            set { name = value; }
         }
         string address;
         /// <summary>
         /// 地址
         /// </summary>
-        internal string Address
+        public string Address
         {
             get { return address; }
             set { address = value; }
@@ -34,7 +45,7 @@ namespace SmartGC.Lib
         /// <summary>
         /// 负责人
         /// </summary>
-        internal string PersonInCharge
+        public string PersonInCharge
         {
             get { return personInCharge; }
             set { personInCharge = value; }
@@ -43,7 +54,7 @@ namespace SmartGC.Lib
         /// <summary>
         /// 手机号
         /// </summary>
-        internal string PhoneNo
+        public string PhoneNo
         {
             get { return phoneNo; }
             set { phoneNo = value; }
@@ -52,16 +63,16 @@ namespace SmartGC.Lib
         /// <summary>
         /// 开卡时间
         /// </summary>
-        internal string CreateDate
+        public string CreateDate
         {
             get { return createDate; }
             set { createDate = value; }
         }
-        CardStatus status;
+        CardBindingStatus status;
         /// <summary>
         /// 是否绑定
         /// </summary>
-        public CardStatus Status
+        public CardBindingStatus Status
         {
             get { return status; }
             set { status = value; }
@@ -70,14 +81,14 @@ namespace SmartGC.Lib
         /// <summary>
         /// 备注
         /// </summary>
-        internal string Remarks
+        public string Remarks
         {
             get { return remarks; }
             set { remarks = value; }
         }
     }
 
-    public enum CardStatus
+    public enum CardBindingStatus
     { 
         /// <summary>
         /// 绑定

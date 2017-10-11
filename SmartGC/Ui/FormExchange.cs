@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using SmartGC.Lib;
+using System;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace SmartGC.Ui
@@ -12,11 +9,63 @@ namespace SmartGC.Ui
     public partial class FormExchange : Form
     {
         DataRow row;
-        public FormExchange(DataRow _row)
+        CardApi api;
+        bool stop = false;
+        public FormExchange(DataRow _row, CardApi _api)
         {
             InitializeComponent();
+            api = _api;
             row = _row;
+            api.OnConnOK += lib_OnConnOK;
+            api.OnDisConn += lib_OnDisConn;
+            api.OnSendMessage += lib_OnSendMessage;
+            api.OnReadCardNo += lib_OnReadCardNo;
+
+            if(!FormMain.connDev)
+            {
+                api.ConnectUsbDev();
+            }
+            Thread th = new Thread(new ThreadStart(ReadCard));
+            th.Start();
         }
+
+        private void lib_OnSendMessage(string msg)
+        {
+            
+        }
+
+        private void lib_OnDisConn()
+        {
+            
+        }
+
+        private void lib_OnConnOK()
+        {
+            FormMain.connDev = true;
+        }
+
+        private void lib_OnReadCardNo(string cardNo)
+        {
+            if (tbxCardNo.InvokeRequired)
+            {
+                tbxCardNo.Invoke(new SmartGC.Lib.CardApi.ReadCardNoHandler(lib_OnReadCardNo), new object[] { cardNo });
+            }
+            else
+            {
+                stop = true;
+                tbxCardNo.Text = cardNo;
+            }
+        }
+
+        void ReadCard()
+        {
+            while (!stop)
+            {
+                api.GetCardNo();
+                Thread.Sleep(500);
+            }
+        }
+
         int score = 0;
         string gid;
         private void FormExchange_Load(object sender, EventArgs e)
@@ -47,7 +96,16 @@ namespace SmartGC.Ui
 
         private void btnExchage_Click(object sender, EventArgs e)
         {
+            stop = true;
+            MessageBox.Show("兑换成功！");
+            this.Close();
+        }
 
+        private void btnReadCard_Click(object sender, EventArgs e)
+        {
+            stop = false;
+            Thread th = new Thread(new ThreadStart(api.GetCardNo));
+            th.Start();
         }
     }
 }

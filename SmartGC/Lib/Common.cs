@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Data;
 using System.IO;
@@ -8,7 +7,7 @@ using System.Text;
 
 namespace SmartGC.Lib
 {
-    internal class Common
+    public class Common
     {
         /// <summary>
         /// 记录日志
@@ -44,9 +43,9 @@ namespace SmartGC.Lib
         /// </summary>
         /// <param name="cardInfo"></param>
         /// <returns></returns>
-        public static DataTable GetCardInfoByCardNo(string cardNo)
+        public static DataTable GetMerchantByCardNo(string cardNo)
         {
-            DataTable dt = GetCardTable();
+            DataTable dt = GetMerchantTable();
             // 发送
             //string data={"serviceMethod":"select","serviceName":"com.cygps.dubbo.creditCard.ICreditService","serviceBody":{"cardNo":"541215464646546"}}
             JObject json = new JObject();
@@ -76,21 +75,24 @@ namespace SmartGC.Lib
             string ts;
             for (int i = 0; i < jlist.Count; i++)
             {
-                tempo = JObject.Parse(jlist[i].ToString());  
+                tempo = JObject.Parse(jlist[i].ToString());
                 ts = tempo["_saveTime"].ToString();// 时间戳
                 ts = ts.Substring(0, ts.Length - 3);
-                remark = tempo.TryGetValue("remark",out remark);
-                dt.Rows.Add(new object[10] 
-            {   i + 1
-                , tempo["cardNo"].ToString()
-                , tempo["name"].ToString()
-                , tempo["status"].ToString() == "Y" ? "已绑定" : "未绑定"
-                , tempo["address"].ToString()
-                , tempo["personLiable"].ToString()
-                , tempo["phoneNumber"].ToString()
-                , GetTime(ts)
-                , "编辑"
-                , remark.ToString() == "False" ? "" : remark.ToString()});
+                remark = tempo.TryGetValue("remark", out remark);
+                dt.Rows.Add(new object[11] 
+                {   
+                    i + 1
+                    , tempo["id"].ToString()
+                    , tempo["cardNo"].ToString()
+                    , tempo["name"].ToString()
+                    , tempo["status"].ToString() == "Y" ? "已绑定" : "未绑定"
+                    , tempo["address"].ToString()
+                    , tempo["personLiable"].ToString()
+                    , tempo["phoneNumber"].ToString()
+                    , GetTime(ts)
+                    , "编辑"
+                    , remark.ToString() == "False" ? "" : remark.ToString()
+                    });
             }
             return dt;
         }
@@ -101,16 +103,16 @@ namespace SmartGC.Lib
         /// <param name="pagesize"></param>
         /// <param name="pageindex"></param>
         /// <returns></returns>
-        public static DataTable GetCardInfoList(CardInfo cardInfo, int pagesize, int pageindex, out int total)
+        public static DataTable GetMerchantList(Merchant cardInfo, int pagesize, int pageindex, out int total)
         {
-            DataTable dt = GetCardTable();
+            DataTable dt = GetMerchantTable();
             // 发送
             //string data={"serviceMethod":"selectByPage","serviceName":"com.cygps.dubbo.creditCard.ICreditService","serviceBody":{"name":"哈哈面","status":"Y","_pageSize":10,"_page":1,"_sortField":"credit","_number":-1}} 
             JObject json = new JObject();
             JObject jPamarm = new JObject();
-            if (!string.IsNullOrEmpty(cardInfo.Customer))
-                jPamarm.Add("*name", cardInfo.Customer);
-            if (cardInfo.Status != CardStatus.X)
+            if (!string.IsNullOrEmpty(cardInfo.Name))
+                jPamarm.Add("*name", cardInfo.Name);
+            if (cardInfo.Status != CardBindingStatus.X)
                 jPamarm.Add("status", cardInfo.Status.ToString());
 
             if (!string.IsNullOrEmpty(cardInfo.PhoneNo))
@@ -164,10 +166,11 @@ namespace SmartGC.Lib
 
                 ts = tempo["_saveTime"].ToString();// 时间戳
                 ts = ts.Substring(0, ts.Length - 3);
-                
-                dt.Rows.Add(new object[10] 
+
+                dt.Rows.Add(new object[11] 
                 {   
                     i + j + 1
+                    , tempo["id"].ToString()
                     , cardNo
                     , tempo["name"].ToString()
                     , tempo["status"].ToString()=="Y" ? "已绑定" : "未绑定"
@@ -183,14 +186,14 @@ namespace SmartGC.Lib
             return dt;
         }
         /// <summary>
-        /// 
+        /// 分页查询获取商品列表
         /// </summary>
         /// <param name="json"></param>
         /// <returns></returns>
         public static DataTable GetCommodityInfoList(int pagesize, int pageindex, out int total)
         {
             DataTable dt = GetCommodityTable();
-            JObject json = new JObject();
+
             JObject jParam = new JObject();
             jParam.Add("isPublish", "Y");
             jParam.Add("_pageSize", pagesize);
@@ -201,6 +204,7 @@ namespace SmartGC.Lib
             serviceName = "com.cygps.dubbo.creditGift.IGiftInfoService";
             serviceBody = jParam;
 
+            JObject json = new JObject();
             json.Add("serviceMethod", serviceMethod);
             json.Add("serviceName", serviceName);
             json.Add("serviceBody", serviceBody);
@@ -243,13 +247,18 @@ namespace SmartGC.Lib
             return dt;
 
         }
-
+        /// <summary>
+        /// post方法
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
         public static string PostData(string url, string data)
         {
             WriteLog("send:" + data);
             byte[] postData = System.Text.Encoding.UTF8.GetBytes(data);
 
-            ServicePointManager.Expect100Continue = false;
+            ServicePointManager.Expect100Continue = Configs.Expect100Continue;
             string srcString = string.Empty;
             WebClient webClient = new WebClient();
             webClient.Headers.Add("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8");
@@ -268,16 +277,17 @@ namespace SmartGC.Lib
             return srcString;
         }
         /// <summary>
-        /// 获取一个卡信息的空表
+        /// 获取一个商户的空表
         /// </summary>
         /// <returns></returns>
-        private static DataTable GetCardTable()
+        private static DataTable GetMerchantTable()
         {
             DataTable dt = new DataTable();
             dt.Columns.Add("Index", typeof(Int32));
+            dt.Columns.Add("CardID", typeof(string));
             dt.Columns.Add("CardNo", typeof(string));
-            dt.Columns.Add("Customer", typeof(string));
-            dt.Columns.Add("Status", typeof(string));
+            dt.Columns.Add("Customer", typeof(string));// 名称
+            dt.Columns.Add("Status", typeof(string));// 卡绑定状态
             dt.Columns.Add("Address", typeof(string));
             dt.Columns.Add("PersonInCharge", typeof(string));
             dt.Columns.Add("PhoneNo", typeof(string));
@@ -288,7 +298,7 @@ namespace SmartGC.Lib
             return dt;
         }
         /// <summary>
-        /// 获取一个兑换物品信息的空表
+        /// 获取一个商品的空表
         /// </summary>
         /// <returns></returns>
         private static DataTable GetCommodityTable()
@@ -314,6 +324,246 @@ namespace SmartGC.Lib
             long lTime = long.Parse(timeStamp + "0000000");
             TimeSpan toNow = new TimeSpan(lTime);
             return dtStart.Add(toNow);
+        }
+        /// <summary>
+        /// 修改商户信息
+        /// </summary>
+        /// <param name="merchant">商户信息</param>
+        /// <returns></returns>
+        public static bool ModifyMerchant(Merchant merchant, out string msg)
+        {
+            bool result = true;
+
+            JObject jID = new JObject();
+            jID.Add("id", merchant.ID);
+
+            JObject jBody = new JObject();
+            jBody.Add("name", merchant.Name);
+            jBody.Add("address", merchant.Address);
+            jBody.Add("phoneNumber", merchant.PhoneNo);
+            jBody.Add("personLiable", merchant.PersonInCharge);
+            jBody.Add("remark", merchant.Remarks);
+
+            JObject jServiceBody = new JObject();
+            jServiceBody.Add("where", jID);
+            jServiceBody.Add("body", jBody);
+
+            JObject json = new JObject();
+            json.Add("serviceMethod", "update");
+            json.Add("serviceName", "com.cygps.dubbo.creditCard.ICreditService");
+            json.Add("serviceBody", jServiceBody);
+
+            string postData = "data=" + json.ToString();
+            string rt = PostData(Configs.Server, postData);
+            json = JObject.Parse(rt);
+            if (json.Count == 0)
+            {
+                result = false;
+                msg = "内部错误";
+            }
+            else if (json["code"].ToString() == "-1")
+            {
+                result = false;
+                msg = json["message"].ToString();
+            }
+            else if (json["code"].ToString() == "0")
+            {
+                msg = "修改成功";
+            }
+            else
+            {
+                result = false;
+                msg = "未知的错误";
+            }
+
+            return result;
+        }
+        /// <summary>
+        /// 开户并绑定IC卡
+        /// </summary>
+        /// <param name="merchant">商户信息</param>
+        /// <returns></returns>
+        public static bool CreateAccount(Merchant merchant, out string msg)
+        {
+            bool result = true;
+            // 创建商户
+            JObject jServiceBody = new JObject();
+            jServiceBody.Add("name", merchant.Name);
+            jServiceBody.Add("address", merchant.Address);
+            jServiceBody.Add("phoneNumber", merchant.PhoneNo);
+            jServiceBody.Add("personLiable", merchant.PersonInCharge);
+            jServiceBody.Add("status", "N");
+            jServiceBody.Add("remark", merchant.Remarks);
+
+            JObject json = new JObject();
+            json.Add("serviceMethod", "save");
+            json.Add("serviceName", "com.cygps.dubbo.creditCard.ICreditService");
+            json.Add("serviceBody", jServiceBody);
+
+            string postData = "data=" + json.ToString();
+            string rt = PostData(Configs.Server, postData);
+            json = JObject.Parse(rt);
+
+            if (json.Count == 0)
+            {
+                result = false;
+                msg = "内部错误";
+            }
+            else if (json["code"].ToString() == "-1")
+            {
+                result = false;
+                msg = json["message"].ToString();
+            }
+            else if (json["code"].ToString() == "0")
+            {
+                msg = json["message"].ToString();
+                merchant.ID = json["id"].ToString();
+                // 绑定卡
+                //{"where":{"id":100000},"body":{"cardNo":"3546521554","status":"Y"}}
+                JObject jWhere = new JObject();
+                jWhere.Add("id", merchant.ID);
+
+                JObject jBody = new JObject();
+                jBody.Add("cardNo", merchant.CardNo);
+                jBody.Add("status", "Y");
+
+                jServiceBody = new JObject();
+                jServiceBody.Add("body", jBody);
+                jServiceBody.Add("where", jWhere);
+
+                json = new JObject();
+                json.Add("serviceMethod", "update");
+                json.Add("serviceName", "com.cygps.dubbo.creditCard.ICreditService");
+                json.Add("serviceBody", jServiceBody);
+
+                postData = "data=" + json.ToString();
+                rt = PostData(Configs.Server, postData);
+                json = JObject.Parse(rt);
+
+                if (json.Count == 0)
+                {
+                    result = false;
+                    msg = "商户已添加，但绑定IC卡错误";
+                }
+                if (json["code"].ToString() == "-1")
+                {
+                    result = false;
+                    msg = "商户已添加，但绑定IC卡错误:" + msg;
+                }
+                else if (json["code"].ToString() == "0")
+                {
+                    msg = "开卡成功";
+                }
+            }
+            else
+            {
+                result = false;
+                msg = "未知的错误";
+            }
+            return result;
+        }
+        /// <summary>
+        /// 商户绑定IC卡
+        /// </summary>
+        /// <param name="merchant"></param>
+        /// <param name="msg"></param>
+        /// <returns></returns>
+        public static bool BindingCard(Merchant merchant, out string msg)
+        {
+            bool result = true;
+            //{"where":{"id":100000},"body":{"cardNo":"3546521554","status":"Y"}}
+            JObject jID = new JObject();
+            jID.Add("id", merchant.ID);
+
+            JObject jBody = new JObject();
+            jBody.Add("cardNo", merchant.CardNo);
+            jBody.Add("status", "Y");
+
+            JObject jServiceBody = new JObject();
+            jServiceBody.Add("where", jID);
+            jServiceBody.Add("body", jBody);
+
+            JObject json = new JObject();
+            json.Add("serviceMethod", "update");
+            json.Add("serviceName", "com.cygps.dubbo.creditCard.ICreditService");
+            json.Add("serviceBody", jServiceBody);
+
+            string postData = "data=" + json.ToString();
+            string rt = PostData(Configs.Server, postData);
+            json = JObject.Parse(rt);
+
+            if (json.Count == 0)
+            {
+                result = false;
+                msg = "内部错误";
+            }
+            else if (json["code"].ToString() == "-1")
+            {
+                result = false;
+                msg = json["message"].ToString();
+            }
+            else if (json["code"].ToString() == "0")
+            {
+                msg = "绑定成功";
+            }
+            else
+            {
+                result = false;
+                msg = "未知的错误";
+            }
+            
+            return result;
+        }
+        /// <summary>
+        /// 商户解绑IC卡
+        /// </summary>
+        /// <param name="merchant"></param>
+        /// <returns></returns>
+        public static bool UnBindingCard(Merchant merchant, out string msg)
+        {
+            bool result = true;
+            //{"where":{"id":100000},"body":{"cardNo":"3546521554","status":"N"}}
+            JObject jID = new JObject();
+            jID.Add("id", merchant.ID);
+
+            JObject jBody = new JObject();
+            jBody.Add("cardNo", merchant.CardNo);
+            jBody.Add("status", "N");
+
+            JObject jServiceBody = new JObject();
+            jServiceBody.Add("where", jID);
+            jServiceBody.Add("body", jBody);
+
+            JObject json = new JObject();
+            json.Add("serviceMethod", "update");
+            json.Add("serviceName", "com.cygps.dubbo.creditCard.ICreditService");
+            json.Add("serviceBody", jServiceBody);
+
+            string postData = "data=" + json.ToString();
+            string rt = PostData(Configs.Server, postData);
+            json = JObject.Parse(rt);
+
+            if (json.Count == 0)
+            {
+                result = false;
+                msg = "内部错误";
+            }
+            else if (json["code"].ToString() == "-1")
+            {
+                result = false;
+                msg = json["message"].ToString();
+            }
+            else if (json["code"].ToString() == "0")
+            {
+                msg = "解绑成功";
+            }
+            else
+            {
+                result = false;
+                msg = "未知的错误";
+            }
+
+            return result;
         }
     }
 }
