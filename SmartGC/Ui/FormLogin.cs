@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
+﻿using SmartGC.Lib;
+using System;
 using System.Windows.Forms;
 
 namespace SmartGC.Ui
@@ -23,9 +18,21 @@ namespace SmartGC.Ui
 
         private void btnLogin_Click(object sender, EventArgs e)
         {
-            this.Hide();
-            FormMain main = new FormMain();
-            main.Show();
+            //string msg = string.Empty;
+            //if (Common.Login(tbxUserName.Text.Trim(), tbxPassword.Text, out msg))
+            //{
+            //    this.Hide();
+            //    FormMain main = new FormMain();
+            //    main.Show();
+            //    if (cbxSaveUser.Checked)
+            //    {
+            //        Configs.LastUser = tbxUserName.Text.Trim();
+            //    }
+            //}
+            //else
+            //{
+            //    MessageBox.Show("登录失败:" + msg);
+            //}
         }
     }
 }

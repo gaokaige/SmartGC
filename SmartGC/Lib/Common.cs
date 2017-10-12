@@ -417,7 +417,7 @@ namespace SmartGC.Lib
             else if (json["code"].ToString() == "0")
             {
                 msg = json["message"].ToString();
-                merchant.ID = json["id"].ToString();
+                merchant.ID = int.Parse(json["id"].ToString());
                 // 绑定卡
                 //{"where":{"id":100000},"body":{"cardNo":"3546521554","status":"Y"}}
                 JObject jWhere = new JObject();
@@ -556,6 +556,47 @@ namespace SmartGC.Lib
             else if (json["code"].ToString() == "0")
             {
                 msg = "解绑成功";
+            }
+            else
+            {
+                result = false;
+                msg = "未知的错误";
+            }
+
+            return result;
+        }
+
+        public static bool Login(string userName, string password, out string msg)
+        {
+            //data={"serviceMethod":"login","serviceName":"com.cygps.dubbo.comm.IUserService","serviceBody":{"account":"yun123!","password":"yun123123"}}
+            bool result = true;
+
+            JObject jServiceBody = new JObject();
+            jServiceBody.Add("account", userName);
+            jServiceBody.Add("password", password);
+
+            JObject json = new JObject();
+            json.Add("serviceMethod", "login");
+            json.Add("serviceName", "com.cygps.dubbo.comm.IUserService");
+            json.Add("serviceBody", jServiceBody);
+
+            string postData = "data=" + json.ToString();
+            string rt = PostData(Configs.Server, postData);
+            json = JObject.Parse(rt);
+
+            if (json.Count == 0)
+            {
+                result = false;
+                msg = "内部错误";
+            }
+            else if (json["code"].ToString() == "-1")
+            {
+                result = false;
+                msg = json["message"].ToString();
+            }
+            else if (json["code"].ToString() == "0")
+            {
+                msg = "登录成功";
             }
             else
             {

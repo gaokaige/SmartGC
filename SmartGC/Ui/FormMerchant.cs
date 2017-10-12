@@ -10,9 +10,10 @@ namespace SmartGC.Ui
     {
         DataRow row = null;
         string cardNo = string.Empty;
-        string merchantID = string.Empty;
+        int merchantID;
         Operation op;
         CardApi api;
+        FormMain formMain;
         /// <summary>
         /// 事件暂停开关，防止与其他窗体的事件冲突
         /// </summary>
@@ -21,10 +22,10 @@ namespace SmartGC.Ui
         /// 开卡
         /// </summary>
         /// <param name="_cardNo"></param>
-        public FormMerchant(string _cardNo)
+        public FormMerchant(string _cardNo, FormMain _formMain)
         {
             InitializeComponent();
-            
+            formMain = _formMain;
             cardNo = _cardNo;
             label1.Visible = true;
             btnRead.Enabled = false;
@@ -36,10 +37,10 @@ namespace SmartGC.Ui
         /// 编辑(包括绑定与解绑)
         /// </summary>
         /// <param name="_row"></param>
-        public FormMerchant(DataRow _row, CardApi _api)
+        public FormMerchant(DataRow _row, CardApi _api, FormMain _formMain)
         {
             InitializeComponent();
-
+            formMain = _formMain;
             api = _api;
             api.OnConnOK += lib_OnConnOK;
             api.OnDisConn += lib_OnDisConn;
@@ -47,7 +48,7 @@ namespace SmartGC.Ui
             api.OnReadCardNo += lib_OnReadCardNo;
 
             row = _row;
-            merchantID = _row["cardid"].ToString();
+            merchantID = int.Parse(_row["cardid"].ToString());
             label1.Visible = false;
             btnRead.Enabled = true;
             btnUnBinding.Enabled = true;
@@ -148,7 +149,10 @@ namespace SmartGC.Ui
                 {
                     string msg = string.Empty;
                     if (Common.ModifyMerchant(merchant, out msg))
+                    {
+                        formMain.UpdateRefesh();
                         MessageBox.Show("修改信息成功");
+                    }
                     else
                         MessageBox.Show("修改信息失败");
                 }
@@ -161,7 +165,10 @@ namespace SmartGC.Ui
                 {
                     string msg = string.Empty;
                     if (Common.CreateAccount(merchant, out msg))
+                    {
+                        formMain.UpdateRefesh();
                         MessageBox.Show("卡片绑定成功");
+                    }
                     else
                         MessageBox.Show("卡片绑定失败:" + msg);
                 }
@@ -241,6 +248,7 @@ namespace SmartGC.Ui
             string msg = string.Empty;
             if(Common.UnBindingCard(merchant , out msg))
             {
+                formMain.UpdateRefesh();
                 MessageBox.Show("卡片解绑成功");
             }
             else
@@ -267,7 +275,10 @@ namespace SmartGC.Ui
                 {
                     string msg = string.Empty;
                     if (Common.BindingCard(merchant, out msg))
+                    {
+                        formMain.UpdateRefesh();
                         MessageBox.Show("卡片绑定成功");
+                    }
                     else
                         MessageBox.Show("卡片绑定失败:" + msg);
                 }

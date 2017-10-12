@@ -76,6 +76,7 @@ namespace SmartGC.Ui
         {
             if (connDev)
                 api.DisconnectUsbDev();
+            Configs.Save();
             Application.Exit();
         }
         #endregion
@@ -312,7 +313,7 @@ namespace SmartGC.Ui
         /// </summary>
         private void CreateAccount()
         {
-            FormMerchant frm = new FormMerchant(tbxCardNo.Text);
+            FormMerchant frm = new FormMerchant(tbxCardNo.Text, this);
             frm.ShowDialog();
         }
 
@@ -329,7 +330,7 @@ namespace SmartGC.Ui
                 DataTable dt = dtMerchant.Clone();
                 DataRow[] rows = dtMerchant.Select("Index=" + dgvMerchant.Rows[e.RowIndex].Cells[0].Value);
                 eventPause = true;
-                FormMerchant frm = new FormMerchant(rows[0], api);
+                FormMerchant frm = new FormMerchant(rows[0], api, this);
                 frm.ShowDialog();
                 eventPause = false;
             }
@@ -362,6 +363,11 @@ namespace SmartGC.Ui
             //{
             //    LoadCommodity();
             //}
+        }
+
+        public void UpdateRefesh()
+        {
+            btnSearch_Click(null, null);
         }
     }
 }

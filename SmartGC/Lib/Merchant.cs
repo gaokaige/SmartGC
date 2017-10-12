@@ -5,11 +5,11 @@
     /// </summary>
     public class Merchant
     {
-        string id;
+        int id;
         /// <summary>
         /// 商户唯一标识6位
         /// </summary>
-        public string ID
+        public int ID
         {
             get { return id; }
             set { id = value; }
