@@ -71,14 +71,18 @@ namespace SmartGC.Lib
             JArray jlist = JArray.Parse(json["array"].ToString());
 
             JObject tempo;
-            JToken remark;
-            string ts;
+            JToken jRemark;
+            string ts, remark;
+
             for (int i = 0; i < jlist.Count; i++)
             {
                 tempo = JObject.Parse(jlist[i].ToString());
                 ts = tempo["_saveTime"].ToString();// 时间戳
                 ts = ts.Substring(0, ts.Length - 3);
-                remark = tempo.TryGetValue("remark", out remark);
+                if (!tempo.TryGetValue("remark", out jRemark))
+                    remark = string.Empty;
+                else
+                    remark = jRemark.ToString();
                 dt.Rows.Add(new object[11] 
                 {   
                     i + 1
@@ -91,7 +95,7 @@ namespace SmartGC.Lib
                     , tempo["phoneNumber"].ToString()
                     , GetTime(ts)
                     , "编辑"
-                    , remark.ToString() == "False" ? "" : remark.ToString()
+                    , remark.ToString()
                     });
             }
             return dt;
@@ -565,7 +569,13 @@ namespace SmartGC.Lib
 
             return result;
         }
-
+        /// <summary>
+        /// 登录认证
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <param name="password"></param>
+        /// <param name="msg"></param>
+        /// <returns></returns>
         public static bool Login(string userName, string password, out string msg)
         {
             //data={"serviceMethod":"login","serviceName":"com.cygps.dubbo.comm.IUserService","serviceBody":{"account":"yun123!","password":"yun123123"}}

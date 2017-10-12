@@ -21,9 +21,9 @@ namespace SmartGC.Ui
             //string msg = string.Empty;
             //if (Common.Login(tbxUserName.Text.Trim(), tbxPassword.Text, out msg))
             //{
-            //    this.Hide();
-            //    FormMain main = new FormMain();
-            //    main.Show();
+                this.Hide();
+                FormMain main = new FormMain();
+                main.Show();
             //    if (cbxSaveUser.Checked)
             //    {
             //        Configs.LastUser = tbxUserName.Text.Trim();
