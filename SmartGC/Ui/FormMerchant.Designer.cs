@@ -122,6 +122,7 @@
             this.tbxCardNo.ReadOnly = true;
             this.tbxCardNo.Size = new System.Drawing.Size(300, 21);
             this.tbxCardNo.TabIndex = 11;
+            this.tbxCardNo.TextChanged += new System.EventHandler(this.tbxCardNo_TextChanged);
             // 
             // tbxCustomer
             // 

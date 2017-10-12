@@ -71,19 +71,26 @@ namespace SmartGC.Lib
             JArray jlist = JArray.Parse(json["array"].ToString());
 
             JObject tempo;
-            JToken jRemark;
+            JToken jRemark, jCredit;
             string ts, remark;
-
+            int credit;
             for (int i = 0; i < jlist.Count; i++)
             {
                 tempo = JObject.Parse(jlist[i].ToString());
                 ts = tempo["_saveTime"].ToString();// 时间戳
                 ts = ts.Substring(0, ts.Length - 3);
+
                 if (!tempo.TryGetValue("remark", out jRemark))
                     remark = string.Empty;
                 else
                     remark = jRemark.ToString();
-                dt.Rows.Add(new object[11] 
+
+                if (!tempo.TryGetValue("credit", out jCredit))
+                    credit = 0;
+                else
+                    credit = int.Parse(jCredit.ToString());
+
+                dt.Rows.Add(new object[12] 
                 {   
                     i + 1
                     , tempo["id"].ToString()
@@ -94,6 +101,7 @@ namespace SmartGC.Lib
                     , tempo["personLiable"].ToString()
                     , tempo["phoneNumber"].ToString()
                     , GetTime(ts)
+                    , credit
                     , "编辑"
                     , remark.ToString()
                     });
@@ -149,9 +157,10 @@ namespace SmartGC.Lib
             JArray jlist = JArray.Parse(json["array"].ToString());
 
             JObject tempo;
-            JToken jRemark, jCardNo;
+            JToken jRemark, jCardNo, jCredit;
             string ts;// 开卡时间戳13位处理成10位
             string remark, cardNo;
+            int credit;
             int j = pagesize * (pageindex - 1);
 
             for (int i = 0; i < jlist.Count; i++)
@@ -168,10 +177,15 @@ namespace SmartGC.Lib
                 else
                     remark = jRemark.ToString();
 
+                if (!tempo.TryGetValue("credit", out jCredit))
+                    credit = 0;
+                else
+                    credit = int.Parse(jCredit.ToString());
+
                 ts = tempo["_saveTime"].ToString();// 时间戳
                 ts = ts.Substring(0, ts.Length - 3);
 
-                dt.Rows.Add(new object[11] 
+                dt.Rows.Add(new object[12] 
                 {   
                     i + j + 1
                     , tempo["id"].ToString()
@@ -182,6 +196,7 @@ namespace SmartGC.Lib
                     , tempo["personLiable"].ToString()
                     , tempo["phoneNumber"].ToString()
                     , GetTime(ts)
+                    , credit
                     , "编辑"
                     , remark
                 });
@@ -288,16 +303,17 @@ namespace SmartGC.Lib
         {
             DataTable dt = new DataTable();
             dt.Columns.Add("Index", typeof(Int32));
-            dt.Columns.Add("CardID", typeof(string));
-            dt.Columns.Add("CardNo", typeof(string));
+            dt.Columns.Add("ID", typeof(string));//商户ID
+            dt.Columns.Add("CardNo", typeof(string));//绑定卡号
             dt.Columns.Add("Customer", typeof(string));// 名称
             dt.Columns.Add("Status", typeof(string));// 卡绑定状态
-            dt.Columns.Add("Address", typeof(string));
-            dt.Columns.Add("PersonInCharge", typeof(string));
-            dt.Columns.Add("PhoneNo", typeof(string));
-            dt.Columns.Add("CreateDate", typeof(DateTime));
+            dt.Columns.Add("Address", typeof(string));//地址
+            dt.Columns.Add("PersonInCharge", typeof(string));//负责人
+            dt.Columns.Add("PhoneNo", typeof(string));//电话
+            dt.Columns.Add("CreateDate", typeof(DateTime));//开卡日期
+            dt.Columns.Add("Credit", typeof(Int32));//积分
             dt.Columns.Add("Action", typeof(string));
-            dt.Columns.Add("Remark", typeof(string));
+            dt.Columns.Add("Remark", typeof(string));//备注
 
             return dt;
         }
@@ -607,6 +623,56 @@ namespace SmartGC.Lib
             else if (json["code"].ToString() == "0")
             {
                 msg = "登录成功";
+                Configs.Token = json["token"].ToString();
+            }
+            else
+            {
+                result = false;
+                msg = "未知的错误";
+            }
+
+            return result;
+        }
+        /// <summary>
+        /// 商户积分兑换商品
+        /// </summary>
+        /// <param name="merchantID">商户ID</param>
+        /// <param name="count">兑换数量</param>
+        /// <param name="gid">商品ID</param>
+        /// <returns></returns>
+        internal static bool Exchage(int merchantID, int count, string gid, out string msg)
+        {
+            bool result = true;
+            //{"id":100000,"number":5,"gid":"20170926112201729"}
+            JObject jServiceBody = new JObject();
+            jServiceBody.Add("id", merchantID);
+            jServiceBody.Add("number", count);
+            jServiceBody.Add("gid", gid);
+
+            JObject json = new JObject();
+            json.Add("serviceMethod", "subtractCredit");
+            json.Add("serviceName", "com.cygps.dubbo.creditCard.ICreditService");
+            json.Add("serviceBody", jServiceBody);
+
+            string postData = "data=" + json.ToString();
+            string rt = PostData(Configs.Server, postData);
+            json = JObject.Parse(rt);
+            if (json.Count == 0)
+            {
+                result = false;
+                msg = "内部错误";
+            }
+            else if (json["code"].ToString() == "-1"
+                ||json["code"].ToString() == "-2"
+                ||json["code"].ToString() == "-3"
+                ||json["code"].ToString() == "-4")
+            {
+                result = false;
+                msg = json["message"].ToString();
+            }
+            else if (json["code"].ToString() == "0")
+            {
+                msg = "兑换成功";
             }
             else
             {

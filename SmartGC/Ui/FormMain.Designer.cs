@@ -169,7 +169,7 @@
             this.plCenter.Size = new System.Drawing.Size(994, 203);
             this.plCenter.TabIndex = 14;
             // 
-            // dgvCardInfo
+            // dgvMerchant
             // 
             this.dgvMerchant.AllowUserToAddRows = false;
             this.dgvMerchant.AllowUserToDeleteRows = false;
@@ -192,7 +192,7 @@
             this.dgvMerchant.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvMerchant.Location = new System.Drawing.Point(0, 0);
             this.dgvMerchant.MultiSelect = false;
-            this.dgvMerchant.Name = "dgvCardInfo";
+            this.dgvMerchant.Name = "dgvMerchant";
             this.dgvMerchant.ReadOnly = true;
             this.dgvMerchant.RowHeadersVisible = false;
             this.dgvMerchant.RowTemplate.Height = 23;
@@ -210,14 +210,14 @@
             this.plBottom.Size = new System.Drawing.Size(994, 30);
             this.plBottom.TabIndex = 13;
             // 
-            // pagerCardInfo
+            // pagerMerchant
             // 
             this.pagerMerchant.BackColor = System.Drawing.SystemColors.ActiveBorder;
             this.pagerMerchant.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pagerMerchant.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(78)))), ((int)(((byte)(151)))));
             this.pagerMerchant.JumpText = "Go";
             this.pagerMerchant.Location = new System.Drawing.Point(0, 0);
-            this.pagerMerchant.Name = "pagerCardInfo";
+            this.pagerMerchant.Name = "pagerMerchant";
             this.pagerMerchant.PageIndex = 1;
             this.pagerMerchant.PageSize = 100;
             this.pagerMerchant.RecordCount = 0;
@@ -516,7 +516,7 @@
             // Column5
             // 
             this.Column5.DataPropertyName = "id";
-            this.Column5.HeaderText = "cardID";
+            this.Column5.HeaderText = "ID";
             this.Column5.Name = "Column5";
             this.Column5.ReadOnly = true;
             this.Column5.Visible = false;

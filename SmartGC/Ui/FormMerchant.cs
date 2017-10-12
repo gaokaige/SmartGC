@@ -9,11 +9,12 @@ namespace SmartGC.Ui
     public partial class FormMerchant : Form
     {
         DataRow row = null;
-        string cardNo = string.Empty;
-        int merchantID;
         Operation op;
         CardApi api;
         FormMain formMain;
+        string cardNo = string.Empty;
+        int merchantID;
+
         /// <summary>
         /// 事件暂停开关，防止与其他窗体的事件冲突
         /// </summary>
@@ -48,11 +49,11 @@ namespace SmartGC.Ui
             api.OnReadCardNo += lib_OnReadCardNo;
 
             row = _row;
-            merchantID = int.Parse(_row["cardid"].ToString());
+            merchantID = int.Parse(_row["id"].ToString());
             label1.Visible = false;
             btnRead.Enabled = true;
             btnUnBinding.Enabled = true;
-            btnBinding.Enabled = true;
+            btnBinding.Enabled = false;
             op = Operation.编辑;
 
             if (!FormMain.connDev)
@@ -290,6 +291,14 @@ namespace SmartGC.Ui
         private void FormMerchant_FormClosing(object sender, FormClosingEventArgs e)
         {
             eventPause = true;
+        }
+
+        private void tbxCardNo_TextChanged(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(tbxCardNo.Text))
+                btnBinding.Enabled = false;
+            else if(op == Operation.绑定)
+                btnBinding.Enabled = true;
         }
     }
 

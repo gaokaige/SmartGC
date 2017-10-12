@@ -11,6 +11,11 @@ namespace SmartGC.Ui
         DataRow row;
         CardApi api;
         bool stop = false;
+        int merchantID;//商户id
+        int score = 0;//兑换单个的积分
+        int merchantCredit;//商户拥有的积分
+        string gid;
+
         public FormExchange(DataRow _row, CardApi _api)
         {
             InitializeComponent();
@@ -21,7 +26,7 @@ namespace SmartGC.Ui
             api.OnSendMessage += lib_OnSendMessage;
             api.OnReadCardNo += lib_OnReadCardNo;
 
-            if(!FormMain.connDev)
+            if (!FormMain.connDev)
             {
                 api.ConnectUsbDev();
             }
@@ -31,12 +36,12 @@ namespace SmartGC.Ui
 
         private void lib_OnSendMessage(string msg)
         {
-            
+
         }
 
         private void lib_OnDisConn()
         {
-            
+
         }
 
         private void lib_OnConnOK()
@@ -54,6 +59,12 @@ namespace SmartGC.Ui
             {
                 stop = true;
                 tbxCardNo.Text = cardNo;
+                DataTable dt = Common.GetMerchantByCardNo(cardNo);
+                if (dt.Rows.Count > 0)
+                {
+                    merchantID = Int32.Parse(dt.Rows[0]["id"].ToString());
+                    merchantCredit = Int32.Parse(dt.Rows[0]["credit"].ToString());
+                }
             }
         }
 
@@ -66,15 +77,13 @@ namespace SmartGC.Ui
             }
         }
 
-        int score = 0;
-        string gid;
         private void FormExchange_Load(object sender, EventArgs e)
         {
             score = int.Parse(row["Score"].ToString());
             gid = row["id"].ToString();
             tbxCommodity.Text = row["Name"].ToString();
             tbxTotalScore.Text = tbxScorePer.Text = row["Score"].ToString();
-            tbxScoreHave.Text = "";
+            tbxScoreHave.Text = merchantCredit.ToString();
         }
 
         private void tbxCount_TextChanged(object sender, EventArgs e)
@@ -96,9 +105,18 @@ namespace SmartGC.Ui
 
         private void btnExchage_Click(object sender, EventArgs e)
         {
-            stop = true;
-            MessageBox.Show("兑换成功！");
-            this.Close();
+            
+            int count = int.Parse(tbxCount.Text);
+            string msg = string.Empty;
+            if (Common.Exchage(merchantID, count, gid, out msg))
+            {
+                MessageBox.Show("兑换成功！");
+                this.Close();
+            }
+            else
+            {
+                MessageBox.Show("兑换失败:" + msg);
+            }
         }
 
         private void btnReadCard_Click(object sender, EventArgs e)

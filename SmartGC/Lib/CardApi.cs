@@ -265,11 +265,13 @@ namespace SmartGC.Lib
             }
         }
 
-        public void WriteCard(byte[] data)
+        public bool WriteCard(byte[] data)
         {
+            bool result = true;
             istr = rf_card(icdev, 1, snr);
             if (istr != 0)
             {
+                result = false;
                 OnSendMessage("卡激活失败.");
             }
             else
@@ -277,11 +279,13 @@ namespace SmartGC.Lib
                 int au = rf_authentication(icdev, 0, 0);
                 if (au == 0)
                 {
-                    rf_write(icdev, 2, data);
+                    if (0 != rf_write(icdev, 2, data))
+                        result = false;
                     rf_halt(icdev);
                     rf_beep(icdev, 50);
                 }
             }
+            return result;
         }
         #endregion
     }

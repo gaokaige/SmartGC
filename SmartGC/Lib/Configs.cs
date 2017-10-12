@@ -10,7 +10,7 @@ namespace SmartGC.Lib
         /// <summary>
         /// 查询卡详情接口地址
         /// </summary>
-        internal static string Server
+        public static string Server
         {
             get { return Configs.server; }
             set { Configs.server = value; }
@@ -28,16 +28,25 @@ namespace SmartGC.Lib
         /// <summary>
         /// 是否保存日志
         /// </summary>
-        internal static bool LogEnable
+        public static bool LogEnable
         {
             get { return logEnable; }
             set { logEnable = value; }
+        }
+        static bool saveUserEnable;
+        /// <summary>
+        /// 是否记住用户名
+        /// </summary>
+        public static bool SaveUserEnable
+        {
+            get { return saveUserEnable; }
+            set { saveUserEnable = value; }
         }
         static string lastUser;
         /// <summary>
         /// 上次登录用户
         /// </summary>
-        internal static string LastUser
+        public static string LastUser
         {
             get { return Configs.lastUser; }
             set { Configs.lastUser = value; }
@@ -71,6 +80,7 @@ namespace SmartGC.Lib
                 Configuration config = System.Configuration.ConfigurationManager.OpenExeConfiguration(configFile);
                 server = config.AppSettings.Settings["Server"].Value;
                 token = config.AppSettings.Settings["Token"].Value;
+                saveUserEnable = bool.Parse(config.AppSettings.Settings["SaveUserEnable"].Value);
                 lastUser = config.AppSettings.Settings["LastUser"].Value;
                 logEnable = bool.Parse(config.AppSettings.Settings["LogEnable"].Value);
                 expect100Continue = bool.Parse(config.AppSettings.Settings["Expect100Continue"].Value);
@@ -89,15 +99,16 @@ namespace SmartGC.Lib
                 Configuration config = System.Configuration.ConfigurationManager.OpenExeConfiguration(configFile);
                 config.AppSettings.Settings["Server"].Value = server;
                 config.AppSettings.Settings["Token"].Value = token;
+                config.AppSettings.Settings["SaveUserEnable"].Value = saveUserEnable.ToString();
                 config.AppSettings.Settings["LastUser"].Value = lastUser;
                 config.AppSettings.Settings["LogEnable"].Value = logEnable.ToString();
-                config.AppSettings.Settings["LogEnable"].Value = expect100Continue.ToString();
+                config.AppSettings.Settings["Expect100Continue"].Value = expect100Continue.ToString();
                 config.AppSettings.Settings["Pagesize"].Value = pagesize.ToString();
                 config.Save();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                MessageBox.Show("保存配置错误:"+ex.Message);
+                MessageBox.Show("保存配置错误:" + ex.Message);
             }
         }
     }

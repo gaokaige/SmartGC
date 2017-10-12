@@ -367,6 +367,7 @@ namespace SmartGC.Ui
 
         public void UpdateRefesh()
         {
+            //tbxCardNo.Text = "";
             btnSearch_Click(null, null);
         }
     }

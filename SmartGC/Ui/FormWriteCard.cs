@@ -19,13 +19,21 @@ namespace SmartGC.Ui
             byte[] data = new byte[16];
             string tmp;
             int j = 0;
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < 16; i++)
             {
                 tmp = str.Substring(j, 2);
                 data[i] = (byte)Convert.ToInt32(tmp, 16);
                 j = j + 2;
             }
-            api.WriteCard(data);
+            if (api.WriteCard(data))
+            {
+                MessageBox.Show("写卡成功");
+            }
+            else
+            {
+                MessageBox.Show("写卡失败，请重新启动软件再次尝试写入");
+            }
+            this.Close();
         }
     }
 }
