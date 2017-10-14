@@ -68,9 +68,11 @@
             this.tbxCardNo.Location = new System.Drawing.Point(77, 64);
             this.tbxCardNo.MaxLength = 32;
             this.tbxCardNo.Name = "tbxCardNo";
-            this.tbxCardNo.Size = new System.Drawing.Size(197, 21);
+            this.tbxCardNo.ReadOnly = true;
+            this.tbxCardNo.Size = new System.Drawing.Size(198, 21);
             this.tbxCardNo.TabIndex = 3;
             this.tbxCardNo.Text = "CA0046FEFEFEFE000000000005911911";
+            this.tbxCardNo.DoubleClick += new System.EventHandler(this.tbxCardNo_DoubleClick);
             // 
             // FormWriteCard
             // 

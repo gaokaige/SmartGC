@@ -10,6 +10,7 @@ namespace SmartGC.Ui
         public FormWriteCard(CardApi _api)
         {
             InitializeComponent();
+            tbxCardNo.Text = "CA0021FEFEFEFE000" + Common.GetRandomCardNo();
             api = _api;
         }
 
@@ -34,6 +35,11 @@ namespace SmartGC.Ui
                 MessageBox.Show("写卡失败，请重新启动软件再次尝试写入");
             }
             this.Close();
+        }
+
+        private void tbxCardNo_DoubleClick(object sender, EventArgs e)
+        {
+            tbxCardNo.Text = "CA0021FEFEFEFE000" + Common.GetRandomCardNo();
         }
     }
 }

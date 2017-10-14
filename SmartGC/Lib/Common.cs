@@ -47,14 +47,14 @@ namespace SmartGC.Lib
         {
             DataTable dt = GetMerchantTable();
             // 发送
-            //string data={"serviceMethod":"select","serviceName":"com.cygps.dubbo.creditCard.ICreditService","serviceBody":{"cardNo":"541215464646546"}}
+            //string data={"serviceMethod":"select","serviceName":"com.cygps.dubbo.wasteSorting.ICreditService","serviceBody":{"cardNo":"541215464646546"}}
             JObject json = new JObject();
             JObject jcredit = new JObject();
             jcredit.Add("cardNo", cardNo);
 
             JToken serviceMethod, serviceName, serviceBody;
             serviceMethod = "select";
-            serviceName = "com.cygps.dubbo.creditCard.ICreditService";
+            serviceName = "com.cygps.dubbo.wasteSorting.ICreditService";
             serviceBody = jcredit;
 
             json.Add("serviceMethod", serviceMethod);
@@ -119,7 +119,7 @@ namespace SmartGC.Lib
         {
             DataTable dt = GetMerchantTable();
             // 发送
-            //string data={"serviceMethod":"selectByPage","serviceName":"com.cygps.dubbo.creditCard.ICreditService","serviceBody":{"name":"哈哈面","status":"Y","_pageSize":10,"_page":1,"_sortField":"credit","_number":-1}} 
+            //string data={"serviceMethod":"selectByPage","serviceName":"com.cygps.dubbo.wasteSorting.ICreditService","serviceBody":{"name":"哈哈面","status":"Y","_pageSize":10,"_page":1,"_sortField":"credit","_number":-1}} 
             JObject json = new JObject();
             JObject jPamarm = new JObject();
             if (!string.IsNullOrEmpty(cardInfo.Name))
@@ -136,7 +136,7 @@ namespace SmartGC.Lib
 
             JToken serviceMethod, serviceName, serviceBody;
             serviceMethod = "selectByPage";
-            serviceName = "com.cygps.dubbo.creditCard.ICreditService";
+            serviceName = "com.cygps.dubbo.wasteSorting.ICreditService";
             serviceBody = jPamarm;
 
             json.Add("serviceMethod", serviceMethod);
@@ -220,7 +220,7 @@ namespace SmartGC.Lib
 
             JToken serviceMethod, serviceName, serviceBody;
             serviceMethod = "selectByPage";
-            serviceName = "com.cygps.dubbo.creditGift.IGiftInfoService";
+            serviceName = "com.cygps.dubbo.wasteSorting.IGiftInfoService";
             serviceBody = jParam;
 
             JObject json = new JObject();
@@ -345,6 +345,17 @@ namespace SmartGC.Lib
             TimeSpan toNow = new TimeSpan(lTime);
             return dtStart.Add(toNow);
         }
+        public static string GetRandomCardNo()
+        {
+            DateTime now = DateTime.Now;
+            string stamp = Math.Round((now - new DateTime(1970, 1, 1)).TotalMilliseconds,0).ToString();
+            Random r = new Random();
+            int i = r.Next(0,9);
+            stamp += i.ToString();
+            i = r.Next(0, 9);
+            stamp += i.ToString();
+            return stamp;
+        }
         /// <summary>
         /// 修改商户信息
         /// </summary>
@@ -370,7 +381,7 @@ namespace SmartGC.Lib
 
             JObject json = new JObject();
             json.Add("serviceMethod", "update");
-            json.Add("serviceName", "com.cygps.dubbo.creditCard.ICreditService");
+            json.Add("serviceName", "com.cygps.dubbo.wasteSorting.ICreditService");
             json.Add("serviceBody", jServiceBody);
 
             string postData = "data=" + json.ToString();
@@ -417,7 +428,7 @@ namespace SmartGC.Lib
 
             JObject json = new JObject();
             json.Add("serviceMethod", "save");
-            json.Add("serviceName", "com.cygps.dubbo.creditCard.ICreditService");
+            json.Add("serviceName", "com.cygps.dubbo.wasteSorting.ICreditService");
             json.Add("serviceBody", jServiceBody);
 
             string postData = "data=" + json.ToString();
@@ -453,7 +464,7 @@ namespace SmartGC.Lib
 
                 json = new JObject();
                 json.Add("serviceMethod", "update");
-                json.Add("serviceName", "com.cygps.dubbo.creditCard.ICreditService");
+                json.Add("serviceName", "com.cygps.dubbo.wasteSorting.ICreditService");
                 json.Add("serviceBody", jServiceBody);
 
                 postData = "data=" + json.ToString();
@@ -505,7 +516,7 @@ namespace SmartGC.Lib
 
             JObject json = new JObject();
             json.Add("serviceMethod", "update");
-            json.Add("serviceName", "com.cygps.dubbo.creditCard.ICreditService");
+            json.Add("serviceName", "com.cygps.dubbo.wasteSorting.ICreditService");
             json.Add("serviceBody", jServiceBody);
 
             string postData = "data=" + json.ToString();
@@ -556,7 +567,7 @@ namespace SmartGC.Lib
 
             JObject json = new JObject();
             json.Add("serviceMethod", "update");
-            json.Add("serviceName", "com.cygps.dubbo.creditCard.ICreditService");
+            json.Add("serviceName", "com.cygps.dubbo.wasteSorting.ICreditService");
             json.Add("serviceBody", jServiceBody);
 
             string postData = "data=" + json.ToString();
@@ -651,7 +662,7 @@ namespace SmartGC.Lib
 
             JObject json = new JObject();
             json.Add("serviceMethod", "subtractCredit");
-            json.Add("serviceName", "com.cygps.dubbo.creditCard.ICreditService");
+            json.Add("serviceName", "com.cygps.dubbo.wasteSorting.ICreditService");
             json.Add("serviceBody", jServiceBody);
 
             string postData = "data=" + json.ToString();
