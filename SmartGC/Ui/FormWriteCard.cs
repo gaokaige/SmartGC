@@ -1,5 +1,6 @@
 ﻿using SmartGC.Lib;
 using System;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace SmartGC.Ui
@@ -10,13 +11,22 @@ namespace SmartGC.Ui
         public FormWriteCard(CardApi _api)
         {
             InitializeComponent();
-            tbxCardNo.Text = "CA0021FEFEFEFE000" + Common.GetRandomCardNo();
+            //tbxCardNo.Text = "CA0021FEFEFEFE000" + Common.GetRandomCardNo();
             api = _api;
         }
 
         private void btnWrite_Click(object sender, EventArgs e)
         {
             string str = tbxCardNo.Text;
+            Regex reg = new Regex("^CA\\d{8}$");
+
+            if (!reg.IsMatch(str))
+            {
+                MessageBox.Show("卡ID格式错误");
+                return;
+            }
+
+            str = str + "0000000000000000000000";
             byte[] data = new byte[16];
             string tmp;
             int j = 0;
@@ -39,7 +49,7 @@ namespace SmartGC.Ui
 
         private void tbxCardNo_DoubleClick(object sender, EventArgs e)
         {
-            tbxCardNo.Text = "CA0021FEFEFEFE000" + Common.GetRandomCardNo();
+            //tbxCardNo.Text = "CA0021FEFEFEFE000" + Common.GetRandomCardNo();
         }
     }
 }

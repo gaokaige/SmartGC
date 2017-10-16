@@ -448,14 +448,14 @@ namespace SmartGC.Lib
             else if (json["code"].ToString() == "0")
             {
                 msg = json["message"].ToString();
-                merchant.ID = int.Parse(json["id"].ToString());
+                merchant.ID = json["id"].ToString();
                 // 绑定卡
                 //{"where":{"id":100000},"body":{"cardNo":"3546521554","status":"Y"}}
                 JObject jWhere = new JObject();
                 jWhere.Add("id", merchant.ID);
 
                 JObject jBody = new JObject();
-                jBody.Add("cardNo", merchant.CardNo);
+                jBody.Add("cardNo", merchant.CardID);
                 jBody.Add("status", "Y");
 
                 jServiceBody = new JObject();
@@ -507,7 +507,7 @@ namespace SmartGC.Lib
             jID.Add("id", merchant.ID);
 
             JObject jBody = new JObject();
-            jBody.Add("cardNo", merchant.CardNo);
+            jBody.Add("cardNo", merchant.CardID);
             jBody.Add("status", "Y");
 
             JObject jServiceBody = new JObject();
@@ -558,7 +558,7 @@ namespace SmartGC.Lib
             jID.Add("id", merchant.ID);
 
             JObject jBody = new JObject();
-            jBody.Add("cardNo", merchant.CardNo);
+            jBody.Add("cardNo", merchant.CardID);
             jBody.Add("status", "N");
 
             JObject jServiceBody = new JObject();
@@ -674,9 +674,11 @@ namespace SmartGC.Lib
                 msg = "内部错误";
             }
             else if (json["code"].ToString() == "-1"
-                ||json["code"].ToString() == "-2"
-                ||json["code"].ToString() == "-3"
-                ||json["code"].ToString() == "-4")
+                || json["code"].ToString() == "-2"
+                || json["code"].ToString() == "-3"
+                || json["code"].ToString() == "-4"
+                || json["code"].ToString() == "-5"
+                || json["code"].ToString() == "-6")
             {
                 result = false;
                 msg = json["message"].ToString();

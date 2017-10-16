@@ -24,7 +24,7 @@ namespace SmartGC.Ui
             api.OnConnOK += lib_OnConnOK;
             api.OnDisConn += lib_OnDisConn;
             api.OnSendMessage += lib_OnSendMessage;
-            api.OnReadCardNo += lib_OnReadCardNo;
+            api.OnReadCard += lib_OnReadCardNo;
 
             if (!FormMain.connDev)
             {
@@ -49,17 +49,17 @@ namespace SmartGC.Ui
             FormMain.connDev = true;
         }
 
-        private void lib_OnReadCardNo(string cardNo)
+        private void lib_OnReadCardNo(string cardNo,string cardId)
         {
             if (tbxCardNo.InvokeRequired)
             {
-                tbxCardNo.Invoke(new SmartGC.Lib.CardApi.ReadCardNoHandler(lib_OnReadCardNo), new object[] { cardNo });
+                tbxCardNo.Invoke(new SmartGC.Lib.CardApi.ReadCardHandler(lib_OnReadCardNo), new object[] { cardNo, cardId });
             }
             else
             {
                 stop = true;
-                tbxCardNo.Text = cardNo;
-                DataTable dt = Common.GetMerchantByCardNo(cardNo);
+                tbxCardNo.Text = cardId;
+                DataTable dt = Common.GetMerchantByCardNo(cardId);
                 if (dt.Rows.Count > 0)
                 {
                     merchantID = Int32.Parse(dt.Rows[0]["id"].ToString());

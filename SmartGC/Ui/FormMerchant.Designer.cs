@@ -35,7 +35,7 @@
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
-            this.tbxCardNo = new System.Windows.Forms.TextBox();
+            this.tbxCardId = new System.Windows.Forms.TextBox();
             this.tbxCustomer = new System.Windows.Forms.TextBox();
             this.tbxAddress = new System.Windows.Forms.TextBox();
             this.tbxPersonInCharge = new System.Windows.Forms.TextBox();
@@ -115,14 +115,14 @@
             this.label11.TabIndex = 10;
             this.label11.Text = "IC卡编号";
             // 
-            // tbxCardNo
+            // tbxCardId
             // 
-            this.tbxCardNo.Location = new System.Drawing.Point(79, 38);
-            this.tbxCardNo.Name = "tbxCardNo";
-            this.tbxCardNo.ReadOnly = true;
-            this.tbxCardNo.Size = new System.Drawing.Size(300, 21);
-            this.tbxCardNo.TabIndex = 11;
-            this.tbxCardNo.TextChanged += new System.EventHandler(this.tbxCardNo_TextChanged);
+            this.tbxCardId.Location = new System.Drawing.Point(79, 38);
+            this.tbxCardId.Name = "tbxCardId";
+            this.tbxCardId.ReadOnly = true;
+            this.tbxCardId.Size = new System.Drawing.Size(300, 21);
+            this.tbxCardId.TabIndex = 11;
+            this.tbxCardId.TextChanged += new System.EventHandler(this.tbxCardNo_TextChanged);
             // 
             // tbxCustomer
             // 
@@ -233,9 +233,9 @@
             this.label3.ForeColor = System.Drawing.Color.Blue;
             this.label3.Location = new System.Drawing.Point(16, 326);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(329, 12);
+            this.label3.Size = new System.Drawing.Size(377, 12);
             this.label3.TabIndex = 24;
-            this.label3.Text = "保存商户信息不会改变商户绑定的IC卡，只能保存其他信息。";
+            this.label3.Text = "保存商户信息不会改变商户绑定的IC卡，只能保存其他信息，开卡除外";
             // 
             // label4
             // 
@@ -266,7 +266,7 @@
             this.Controls.Add(this.tbxPersonInCharge);
             this.Controls.Add(this.tbxAddress);
             this.Controls.Add(this.tbxCustomer);
-            this.Controls.Add(this.tbxCardNo);
+            this.Controls.Add(this.tbxCardId);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.label9);
@@ -297,7 +297,7 @@
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.TextBox tbxCardNo;
+        private System.Windows.Forms.TextBox tbxCardId;
         private System.Windows.Forms.TextBox tbxCustomer;
         private System.Windows.Forms.TextBox tbxAddress;
         private System.Windows.Forms.TextBox tbxPersonInCharge;

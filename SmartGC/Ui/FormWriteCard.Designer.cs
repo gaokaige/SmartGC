@@ -32,11 +32,12 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.tbxCardNo = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // btnWrite
             // 
-            this.btnWrite.Location = new System.Drawing.Point(280, 63);
+            this.btnWrite.Location = new System.Drawing.Point(281, 46);
             this.btnWrite.Name = "btnWrite";
             this.btnWrite.Size = new System.Drawing.Size(75, 23);
             this.btnWrite.TabIndex = 0;
@@ -48,7 +49,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.ForeColor = System.Drawing.Color.Red;
-            this.label1.Location = new System.Drawing.Point(13, 27);
+            this.label1.Location = new System.Drawing.Point(12, 18);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(149, 12);
             this.label1.TabIndex = 1;
@@ -57,7 +58,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(15, 68);
+            this.label2.Location = new System.Drawing.Point(16, 51);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(65, 12);
             this.label2.TabIndex = 2;
@@ -65,20 +66,28 @@
             // 
             // tbxCardNo
             // 
-            this.tbxCardNo.Location = new System.Drawing.Point(77, 64);
+            this.tbxCardNo.Location = new System.Drawing.Point(78, 47);
             this.tbxCardNo.MaxLength = 32;
             this.tbxCardNo.Name = "tbxCardNo";
-            this.tbxCardNo.ReadOnly = true;
             this.tbxCardNo.Size = new System.Drawing.Size(198, 21);
             this.tbxCardNo.TabIndex = 3;
-            this.tbxCardNo.Text = "CA0046FEFEFEFE000000000005911911";
             this.tbxCardNo.DoubleClick += new System.EventHandler(this.tbxCardNo_DoubleClick);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(76, 83);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(95, 12);
+            this.label3.TabIndex = 4;
+            this.label3.Text = "格式:CA10000001";
             // 
             // FormWriteCard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(368, 112);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.tbxCardNo);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -99,5 +108,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox tbxCardNo;
+        private System.Windows.Forms.Label label3;
     }
 }

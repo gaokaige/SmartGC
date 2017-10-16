@@ -188,17 +188,17 @@ namespace SmartGC.Lib
         /// 读卡器断开连接成功时发生
         /// </summary>
         public event DisConnHandler OnDisConn;
-        public delegate void ReadCardNoHandler(string cardNo);
+        public delegate void ReadCardHandler(string cardNo, string cardId);
         /// <summary>
         /// 读取卡片ID成功时发生
         /// </summary>
-        public event ReadCardNoHandler OnReadCardNo;
+        public event ReadCardHandler OnReadCard;
         /// <summary>
         /// 读卡器设备id
         /// </summary>
         int icdev;
-        byte[] snr = new byte[5];// 卡序列号5字节
-        byte[] cno = new byte[16];// 卡号16字节
+        byte[] cno = new byte[16];// 出场编号
+        byte[] cid = new byte[16];// ID号
         int istr;
         string str;
         /// <summary>
@@ -230,27 +230,71 @@ namespace SmartGC.Lib
         /// <returns></returns>
         public void GetCardNo()
         {
-            string cardNo = string.Empty;
+            try
+            {
+                string cardNo = string.Empty;
 
-            istr = rf_card(icdev, 1, snr);
-            if (istr != 0)
-            {
-                OnSendMessage("卡激活失败,请将卡片放置于读卡区域.");
+                istr = rf_card(icdev, 1, cno);
+                if (istr != 0)
+                {
+                    OnSendMessage("卡激活失败,请将卡片放置于读卡区域.");
+                }
+                else
+                {
+                    int au = rf_authentication(icdev, 0, 0);
+                    Console.WriteLine(au);
+                    byte[] ascid = new byte[32];
+                    byte[] ascno = new byte[32];
+
+                    int ar = rf_read(icdev, 0, cno);
+                    if (ar != 0)
+                    {
+                        OnSendMessage("读卡No.失败");
+                        return;
+                    }
+                    hex_a(cno, ascno, 16);
+                    string no = System.Text.Encoding.Default.GetString(ascno);
+                    int br = rf_read(icdev, 2, cid);//读id
+                    if (br != 0)
+                    {
+                        OnSendMessage("读卡ID失败");
+                        return;
+                    }
+                    // 如果不是CA开头，也不是0
+                    if (!(cid[0] == 0xC && cid[1] == 0xA)
+                        || !CheckValue(cid))
+                    {
+                        OnSendMessage("无效卡请重试");
+                        return;
+                    }
+
+                    hex_a(cid, ascid, 16);
+                    string id = System.Text.Encoding.Default.GetString(ascid);
+                    id = id.Substring(0, 10);
+                    rf_beep(icdev, 10);
+                    OnSendMessage("读卡成功,卡ID：" + id);
+                    OnReadCard(no, id);
+                }
             }
-            else
+            catch (Exception ex)
             {
-                int a = rf_authentication(icdev, 0, 0);
-                Console.WriteLine(a);
-                byte[] acno = new byte[32];
-                int b = rf_read(icdev, 2, cno);
-                Console.WriteLine(b);
+                OnSendMessage("读卡失败:" + ex.Message);
+            }
+            finally
+            {
                 rf_halt(icdev);
-                hex_a(cno, acno, 16);
-                string no = System.Text.Encoding.Default.GetString(acno);
-                rf_beep(icdev, 10);
-                OnSendMessage("读卡成功,卡号：" + no);
-                OnReadCardNo(no);
             }
+        }
+        
+        private bool CheckValue(byte[] cid)
+        {
+            bool result = true;
+            foreach (byte item in cid)
+            {
+                if (item != 0x0)
+                    result = false;
+            }
+                return result;
         }
         /// <summary>
         /// 断开读卡器
@@ -268,7 +312,7 @@ namespace SmartGC.Lib
         public bool WriteCard(byte[] data)
         {
             bool result = true;
-            istr = rf_card(icdev, 1, snr);
+            istr = rf_card(icdev, 1, cno);
             if (istr != 0)
             {
                 result = false;

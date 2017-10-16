@@ -48,7 +48,7 @@ namespace SmartGC.Ui
             api.OnConnOK += lib_OnConnOK;
             api.OnDisConn += lib_OnDisConn;
             api.OnSendMessage += lib_OnSendMessage;
-            api.OnReadCardNo += lib_OnReadCardNo;
+            api.OnReadCard += lib_OnReadCardNo;
             // 禁止表格自动获取内容
             dgvMerchant.AutoGenerateColumns = false;
             dgvCommodity.AutoGenerateColumns = false;
@@ -110,18 +110,25 @@ namespace SmartGC.Ui
             }
         }
 
-        private void lib_OnReadCardNo(string cardNo)
+        private void lib_OnReadCardNo(string cardNo, string cardId)
         {
             if (eventPause)
                 return;
-            if (tbxCardNo.InvokeRequired)
+            if (tbxCardId.InvokeRequired)
             {
-                tbxCardNo.Invoke(new SmartGC.Lib.CardApi.ReadCardNoHandler(lib_OnReadCardNo), new object[] { cardNo });
+                tbxCardId.Invoke(new SmartGC.Lib.CardApi.ReadCardHandler(lib_OnReadCardNo), new object[] { cardNo, cardId });
             }
             else
             {
-                tbxCardNo.Text = cardNo;
-                btnSearch_Click(null, null);
+                tbxCardId.Text = cardId;
+                tbxCardId.Tag = cardNo;
+                if (cardId == "0000000000")
+                {
+                    // 开户+绑定界面
+                    CreateAccount();
+                }
+                else
+                    btnSearch_Click(null, null);
             }
         }
         #endregion
@@ -173,7 +180,7 @@ namespace SmartGC.Ui
             lbMessage.Text = "查询中...";
             lbMessage.Refresh();
             merchant = new Merchant();
-            merchant.CardNo = tbxCardNo.Text;
+            merchant.CardID = tbxCardId.Text;
             merchant.Name = tbxCustomer.Text;
             merchant.PhoneNo = tbxPhoneNo.Text;
             if (combStatus.SelectedIndex != -1)
@@ -233,13 +240,13 @@ namespace SmartGC.Ui
 
         private void tbxCardNo_DoubleClick(object sender, EventArgs e)
         {
-            if (tbxCardNo.Text != string.Empty)
+            if (tbxCardId.Text != string.Empty)
             {
-                cardNoCache = tbxCardNo.Text;
-                tbxCardNo.Text = "";
+                cardNoCache = tbxCardId.Text;
+                tbxCardId.Text = "";
             }
             else
-                tbxCardNo.Text = cardNoCache;
+                tbxCardId.Text = cardNoCache;
         }
 
         #endregion
@@ -264,9 +271,9 @@ namespace SmartGC.Ui
             try
             {
                 int total = 0;
-                if (merchant.CardNo != string.Empty)// 卡号不为空时
+                if (merchant.CardID != string.Empty)// 卡号不为空时
                 {
-                    dtMerchant = Common.GetMerchantByCardNo(merchant.CardNo);
+                    dtMerchant = Common.GetMerchantByCardNo(merchant.CardID);
                     total = dtMerchant.Rows.Count;
                 }
                 else
@@ -276,12 +283,9 @@ namespace SmartGC.Ui
 
                 dgvMerchant.DataSource = dtMerchant;
                 pagerMerchant.DrawControl(total);
-
-                if (merchant.CardNo != string.Empty && dtMerchant.Rows.Count == 0)
+                if (dtMerchant.Rows.Count == 0)
                 {
-                    // 开户+绑定界面
-                    CreateAccount();
-                    return;
+                    MessageBox.Show(string.Format("卡号{0}查无商户信息. 请同客服联系", merchant.CardID));
                 }
             }
             catch
@@ -313,7 +317,7 @@ namespace SmartGC.Ui
         /// </summary>
         private void CreateAccount()
         {
-            FormMerchant frm = new FormMerchant(tbxCardNo.Text, this);
+            FormMerchant frm = new FormMerchant(tbxCardId.Text, tbxCardId.Tag, this);
             frm.ShowDialog();
         }
 
@@ -359,16 +363,21 @@ namespace SmartGC.Ui
 
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //if (tabControl1.SelectedIndex == 1)
-            //{
-            //    LoadCommodity();
-            //}
+            
         }
 
         public void UpdateRefesh()
         {
-            //tbxCardNo.Text = "";
             btnSearch_Click(null, null);
+        }
+        /// <summary>
+        /// 刷新商品
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void tsmiRefreshCommodity_Click(object sender, EventArgs e)
+        {
+            LoadCommodity();
         }
     }
 }

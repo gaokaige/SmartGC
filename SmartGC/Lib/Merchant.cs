@@ -5,23 +5,23 @@
     /// </summary>
     public class Merchant
     {
-        int id;
+        string id;
         /// <summary>
         /// 商户唯一标识6位
         /// </summary>
-        public int ID
+        public string ID
         {
             get { return id; }
             set { id = value; }
         }
-        string cardNo;
+        string cardId;
         /// <summary>
         /// IC卡编号
         /// </summary>
-        public string CardNo
+        public string CardID
         {
-            get { return cardNo; }
-            set { cardNo = value; }
+            get { return cardId; }
+            set { cardId = value; }
         }
         string name;
         /// <summary>
