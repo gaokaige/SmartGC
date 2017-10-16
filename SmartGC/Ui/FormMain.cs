@@ -166,7 +166,7 @@ namespace SmartGC.Ui
         {
             if (!connDev)
                 api.ConnectUsbDev();
-            Thread th = new Thread(new ThreadStart(api.GetCardNo));
+            Thread th = new Thread(new ThreadStart(api.GetCardNoAndID));
             th.Start();
         }
 
@@ -317,8 +317,10 @@ namespace SmartGC.Ui
         /// </summary>
         private void CreateAccount()
         {
-            FormMerchant frm = new FormMerchant(tbxCardId.Text, tbxCardId.Tag, this);
+            eventPause = true;
+            FormMerchant frm = new FormMerchant(tbxCardId.Text, tbxCardId.Tag, this, api);
             frm.ShowDialog();
+            eventPause = false;
         }
 
         /// <summary>

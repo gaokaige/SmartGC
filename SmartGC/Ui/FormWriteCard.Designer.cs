@@ -71,6 +71,7 @@
             this.tbxCardNo.Name = "tbxCardNo";
             this.tbxCardNo.Size = new System.Drawing.Size(198, 21);
             this.tbxCardNo.TabIndex = 3;
+            this.tbxCardNo.Text = "0000000000";
             this.tbxCardNo.DoubleClick += new System.EventHandler(this.tbxCardNo_DoubleClick);
             // 
             // label3

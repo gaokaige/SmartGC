@@ -37,6 +37,7 @@
             this.tsmiConnect = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiDisconnect = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiWriteCard = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiRefreshCommodity = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.plBase = new System.Windows.Forms.Panel();
             this.plCenter = new System.Windows.Forms.Panel();
@@ -80,7 +81,6 @@
             this.Column12 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column13 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column14 = new System.Windows.Forms.DataGridViewButtonColumn();
-            this.tsmiRefreshCommodity = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.plBase.SuspendLayout();
             this.plCenter.SuspendLayout();
@@ -144,6 +144,13 @@
             this.tsmiWriteCard.Size = new System.Drawing.Size(44, 21);
             this.tsmiWriteCard.Text = "写卡";
             this.tsmiWriteCard.Click += new System.EventHandler(this.tsmiWriteCard_Click);
+            // 
+            // tsmiRefreshCommodity
+            // 
+            this.tsmiRefreshCommodity.Name = "tsmiRefreshCommodity";
+            this.tsmiRefreshCommodity.Size = new System.Drawing.Size(68, 21);
+            this.tsmiRefreshCommodity.Text = "刷新商品";
+            this.tsmiRefreshCommodity.Click += new System.EventHandler(this.tsmiRefreshCommodity_Click);
             // 
             // tsmiAbout
             // 
@@ -602,13 +609,6 @@
             this.Column14.ReadOnly = true;
             this.Column14.Width = 80;
             // 
-            // tsmiRefreshCommodity
-            // 
-            this.tsmiRefreshCommodity.Name = "tsmiRefreshCommodity";
-            this.tsmiRefreshCommodity.Size = new System.Drawing.Size(68, 21);
-            this.tsmiRefreshCommodity.Text = "刷新商品";
-            this.tsmiRefreshCommodity.Click += new System.EventHandler(this.tsmiRefreshCommodity_Click);
-            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -654,7 +654,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button btnSearch;
         private System.Windows.Forms.TextBox tbxPhoneNo;
-        private System.Windows.Forms.TextBox tbxCardId;
         private System.Windows.Forms.Panel plTop;
         private System.Windows.Forms.Panel plCenter;
         private System.Windows.Forms.Panel plBottom;
@@ -694,6 +693,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
         private System.Windows.Forms.DataGridViewButtonColumn dataGridViewButtonColumn1;
         private System.Windows.Forms.ToolStripMenuItem tsmiRefreshCommodity;
+        public System.Windows.Forms.TextBox tbxCardId;
     }
 }
 

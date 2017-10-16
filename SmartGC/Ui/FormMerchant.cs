@@ -14,7 +14,7 @@ namespace SmartGC.Ui
         FormMain formMain;
         string cardId = string.Empty;
         string merchantID;
-        string cardNo, cardNoCheck; 
+        string cardNo; 
         /// <summary>
         /// 事件暂停开关，防止与其他窗体的事件冲突
         /// </summary>
@@ -23,12 +23,17 @@ namespace SmartGC.Ui
         /// 开卡
         /// </summary>
         /// <param name="_cardId"></param>
-        public FormMerchant(string _cardId, object _cardNo,  FormMain _formMain)
+        public FormMerchant(string _cardId, object _cardNo,  FormMain _formMain, CardApi _api)
         {
             InitializeComponent();
             formMain = _formMain;
             cardId = _cardId;
             cardNo = _cardNo.ToString();
+            api = _api;
+            api.OnConnOK += lib_OnConnOK;
+            api.OnDisConn += lib_OnDisConn;
+            api.OnSendMessage += lib_OnSendMessage;
+            api.OnReadCard += lib_OnReadCardNo;
             label1.Visible = true;
             btnRead.Enabled = false;
             btnUnBinding.Enabled = false;
@@ -80,7 +85,6 @@ namespace SmartGC.Ui
             else
             {
                 tbxCardId.Text = _cardId;
-                cardNoCheck = _cardNo;
             }
         }
 
@@ -164,8 +168,8 @@ namespace SmartGC.Ui
             // 开卡：商户不存在，创建新的商户并且绑定IC卡
             if (op == Operation.开卡)
             {
-                api.GetCardNo();
-                if (cardNo != cardNoCheck)
+                
+                if (cardNo != api.GetCardNo())
                 {
                     MessageBox.Show("开卡过程中不能换卡");
                     return;
@@ -176,7 +180,7 @@ namespace SmartGC.Ui
                     if (Common.CreateAccount(merchant, out msg))
                     {
                         // 写卡
-                        string cardId = merchant.CardID;
+                        string cardId = merchant.ID;//卡id=客户id
                         cardId = cardId + "0000000000000000000000";
                         string tmp;
                         byte[] data = new byte[16];
@@ -193,7 +197,7 @@ namespace SmartGC.Ui
                             Clipboard.SetDataObject(merchant.CardID);
                             MessageBox.Show(string.Format("写卡失败，请使用写卡功能将卡号写入,卡号已经被复制。", merchant.CardID));
                         }
-                        
+                        formMain.tbxCardId.Text = merchant.ID;
                         formMain.UpdateRefesh();
                         MessageBox.Show("卡片绑定成功");
                     }
@@ -257,7 +261,7 @@ namespace SmartGC.Ui
         private void btnRead_Click(object sender, EventArgs e)
         {
             op = Operation.绑定;
-            Thread th = new Thread(new ThreadStart(api.GetCardNo));
+            Thread th = new Thread(new ThreadStart(api.GetCardNoAndID));
             th.Start();
         }
         /// <summary>

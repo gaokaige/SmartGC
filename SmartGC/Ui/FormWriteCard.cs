@@ -20,7 +20,7 @@ namespace SmartGC.Ui
             string str = tbxCardNo.Text;
             Regex reg = new Regex("^CA\\d{8}$");
 
-            if (!reg.IsMatch(str))
+            if (!reg.IsMatch(str) && str!="0000000000")
             {
                 MessageBox.Show("卡ID格式错误");
                 return;

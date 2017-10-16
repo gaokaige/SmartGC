@@ -455,7 +455,7 @@ namespace SmartGC.Lib
                 jWhere.Add("id", merchant.ID);
 
                 JObject jBody = new JObject();
-                jBody.Add("cardNo", merchant.CardID);
+                jBody.Add("cardNo", merchant.ID);
                 jBody.Add("status", "Y");
 
                 jServiceBody = new JObject();
@@ -651,7 +651,7 @@ namespace SmartGC.Lib
         /// <param name="count">兑换数量</param>
         /// <param name="gid">商品ID</param>
         /// <returns></returns>
-        internal static bool Exchage(int merchantID, int count, string gid, out string msg)
+        internal static bool Exchage(string merchantID, int count, string gid, out string msg)
         {
             bool result = true;
             //{"id":100000,"number":5,"gid":"20170926112201729"}

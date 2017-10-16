@@ -11,7 +11,7 @@ namespace SmartGC.Ui
         DataRow row;
         CardApi api;
         bool stop = false;
-        int merchantID;//商户id
+        string merchantID;//商户id
         int score = 0;//兑换单个的积分
         int merchantCredit;//商户拥有的积分
         string gid;
@@ -62,7 +62,7 @@ namespace SmartGC.Ui
                 DataTable dt = Common.GetMerchantByCardNo(cardId);
                 if (dt.Rows.Count > 0)
                 {
-                    merchantID = Int32.Parse(dt.Rows[0]["id"].ToString());
+                    merchantID = dt.Rows[0]["id"].ToString();
                     merchantCredit = Int32.Parse(dt.Rows[0]["credit"].ToString());
                 }
             }
@@ -72,7 +72,7 @@ namespace SmartGC.Ui
         {
             while (!stop)
             {
-                api.GetCardNo();
+                api.GetCardNoAndID();
                 Thread.Sleep(500);
             }
         }
@@ -122,7 +122,7 @@ namespace SmartGC.Ui
         private void btnReadCard_Click(object sender, EventArgs e)
         {
             stop = false;
-            Thread th = new Thread(new ThreadStart(api.GetCardNo));
+            Thread th = new Thread(new ThreadStart(api.GetCardNoAndID));
             th.Start();
         }
     }

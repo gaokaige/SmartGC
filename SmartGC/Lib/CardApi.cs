@@ -228,7 +228,7 @@ namespace SmartGC.Lib
         /// 读卡获取卡ID
         /// </summary>
         /// <returns></returns>
-        public void GetCardNo()
+        public void GetCardNoAndID()
         {
             try
             {
@@ -261,8 +261,8 @@ namespace SmartGC.Lib
                         return;
                     }
                     // 如果不是CA开头，也不是0
-                    if (!(cid[0] == 0xC && cid[1] == 0xA)
-                        || !CheckValue(cid))
+                    if (!(cid[0] == 0xCA
+                        || CheckValue(cid)))
                     {
                         OnSendMessage("无效卡请重试");
                         return;
@@ -285,7 +285,49 @@ namespace SmartGC.Lib
                 rf_halt(icdev);
             }
         }
-        
+        public string GetCardNo()
+        {
+            string cardNo = string.Empty;
+            try
+            {
+                istr = rf_card(icdev, 1, cno);
+                if (istr != 0)
+                {
+                    OnSendMessage("卡激活失败,请将卡片放置于读卡区域.");
+                }
+                else
+                {
+                    int au = rf_authentication(icdev, 0, 0);
+                    Console.WriteLine(au);
+                    
+                    byte[] ascno = new byte[32];
+
+                    int ar = rf_read(icdev, 0, cno);
+                    if (ar != 0)
+                    {
+                        OnSendMessage("读卡No.失败");
+                    }
+                    else
+                    {
+                        hex_a(cno, ascno, 16);
+                        cardNo = System.Text.Encoding.Default.GetString(ascno);
+                        rf_beep(icdev, 10);
+                    }
+                }
+                return cardNo;
+
+            }
+            catch (Exception ex)
+            {
+                OnSendMessage("读卡失败:" + ex.Message);
+                return cardNo;
+            }
+            finally
+            {
+                rf_halt(icdev);
+            }
+        }
+
         private bool CheckValue(byte[] cid)
         {
             bool result = true;
